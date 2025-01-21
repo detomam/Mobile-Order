@@ -7,6 +7,8 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import HomeHeaderLogo from '@/components/ui/HomeHeaderLogo';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -14,30 +16,41 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
+        headerShown: true,
+        headerStyle: { backgroundColor: '#ffffff'},
+        headerTintColor: 'black',
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: 'white',
+        tabBarStyle: {
+          backgroundColor: '#881c1c',
+          position: Platform.select({
+            ios: 'absolute',
+            android: 'relative',
+          }),
+        },
       }}>
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Settings',
+          tabBarIcon: ({focused}) => <Ionicons name={focused ? "settings" : "settings-outline"} size={28} color={'white'} />,
+        }}
+      />
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          headerTitle: HomeHeaderLogo,
+          tabBarIcon: ({focused}) => <Ionicons size={28} name={focused ? "home" : "home-outline"} color={'white'} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="shoppingBag"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Bag',
+          tabBarIcon: ({focused}) => <Ionicons name={focused ? "bag" : "bag-outline"} size={28} color={'white'} />,
         }}
       />
     </Tabs>
