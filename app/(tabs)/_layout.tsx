@@ -47,10 +47,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="shoppingBag"
+        name="cart"
         options={{
-          title: 'Bag',
-          tabBarIcon: ({focused}) => <Ionicons name={focused ? "bag" : "bag-outline"} size={28} color={'white'} />,
+          title: 'Your Cart',
+          tabBarIcon: ({focused}) => <Ionicons name={focused ? "cart" : "cart-outline"} size={28} color={'white'} />,
         }}
       />
     </Tabs>

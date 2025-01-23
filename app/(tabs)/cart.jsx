@@ -3,12 +3,12 @@ import React from 'react'
 import UMassAmherstImg from '@/assets/images/UMassAmherst_horiz.png'
 
 
-const shoppingBag = () => {
+const cart = () => {
   return (
     <View style={styles.container}>
       <View style={styles.navBar}/>
       <Image source={UMassAmherstImg}></Image>
-      <Text>Shopping Bag</Text>
+      <Text>Your Cart</Text>
     </View>
   )
 }
@@ -45,4 +45,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default shoppingBag
+export default cart

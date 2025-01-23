@@ -14,5 +14,5 @@
     "**/*.jsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "app/(tabs)/index.jsx", "app/(tabs)/shoppingBag.jsx"  ]
+, "app/(tabs)/index.jsx", "app/(tabs)/cart.jsx"  ]
 }

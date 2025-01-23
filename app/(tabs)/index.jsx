@@ -1,4 +1,5 @@
-
+import { useFonts } from '@expo-google-fonts/open-sans';
+import { OpenSans_400Regular, OpenSans_700Bold } from '@expo-google-fonts/open-sans';
 import { View, Text, StyleSheet, Image, Pressable} from 'react-native'
 import React, {useState} from 'react'
 import {Link} from 'expo-router'
@@ -11,7 +12,7 @@ const app = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.navBar}/>
+      <View style={styles.decorativeBar}/>
       <SearchBar></SearchBar> 
       {/* <Text style={styles.title}>Mobile Order</Text> */}
       <ListView></ListView>
@@ -71,8 +72,8 @@ const styles = StyleSheet.create({
     padding: 4
   },
 
-  navBar: {
-    height: 60,
+  decorativeBar: {
+    height: 70,
     backgroundColor: '#881c1c',
     width: '100%',
   },

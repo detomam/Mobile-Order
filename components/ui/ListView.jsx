@@ -2,6 +2,8 @@ import { StyleSheet, Appearance, SafeAreaView, FlatList, ScrollView, Platform, V
 import {Colors} from '@/constants/Colors';
 import {LOCATION_DATA} from "@/constants/LocationData"
 import { setStatusBarHidden } from "expo-status-bar";
+import { useFonts } from '@expo-google-fonts/open-sans';
+import { OpenSans_400Regular, OpenSans_700Bold } from '@expo-google-fonts/open-sans';
 
 export default function ListView() {
     const colorScheme = Appearance.getColorScheme();
@@ -19,13 +21,22 @@ export default function ListView() {
                 contentContainerStyle = {styles.contentContainer}
                 ListEmptyComponent = {<Text>No locations available</Text>}
                 renderItem = {({ item }) => (
-                    <View style = {styles.row}>
+                    <View style={[
+                        styles.row,
+                        item.openStatus ? styles.rowActive : styles.rowInactive
+                    ]}>
                         <View style = {styles.textRow}>
-                            <Text style={[styles.itemTitle, styles.itemText]}>{item.title}</Text>
-                            <Text style = {styles.itemText}>{item.location}</Text>
+                            <Text style={[styles.itemTitle, item.openStatus ? styles.itemTextActive : styles.itemTextInactive]}>
+                                {item.title}
+                            </Text>
+                            <Text style={[styles.itemText, item.openStatus ? styles.itemTextActive : styles.itemTextInactive]}>
+                                {item.location}
+                            </Text>
                         </View>
                         <View>
-                            <Text>{item.hours}</Text>
+                            <Text style={[styles.itemText, item.openStatus ? styles.itemTextActive : styles.itemTextInactive]}>
+                            {item.openStatus ? item.hours : 'Closed'}
+                            </Text>
                         </View>
                     </View>
             )}/>
@@ -39,17 +50,9 @@ function createStyles(theme, colorScheme) {
         contentContainer : {
             paddingTop: 10,
             paddingBottom: 20,
+            width: '100%',
             // paddingHorizontal: 12,
             backgroundColor: theme.background,
-        },
-
-        separator: {
-            height: 1,
-            backgroundColor: colorScheme === 'dark' ? 'white' : "black",
-            width: '100%',
-            // maxWidth: 500,
-            marginHorizontal: 'auto',
-            // marginBottom: 10,
         },
         row: {
             flexDirection: 'row',
@@ -58,25 +61,36 @@ function createStyles(theme, colorScheme) {
             // marginBottom: 10,
             borderStyle: 'solid',
             borderColor: colorScheme === 'dark' ? 'white' : '#a2aaad',
-            borderWidth: 1,
+            borderWidth: 0.5,
             overflow: 'hidden',
             marginHorizontal: 'auto',
-            alignItems: 'center'
+            paddingHorizontal: 10,
+            alignItems: 'center',
+        },
+        rowActive: {
+            backgroundColor: theme.cardBackground,
+        },
+        rowInactive: {
+            backgroundColor: colorScheme === 'dark' ? '#4d4d4d' : '#D9D9D9',
         },
         textRow : {
-            width: '75%',
+            width: '50%',
             paddingTop: 10,
-            paddingLeft: 10,
-            paddingRight: 10,
-            // marginRight: 10,
             flexGrow: 1,
         },
         itemTitle: {
-            fontSize: 18,            
+            fontSize: 18,
+            fontFamily: 'OpenSans_400Regular',
         },
         itemText : {
             color: theme.text,
-
-        }
+            fontFamily: 'OpenSans_400Regular',
+        },
+        itemTextActive: {
+            color: theme.text,
+        },
+        itemTextInactive: {
+            color: colorScheme === 'dark' ? '#a9a9a9' : '#7C7C7C',
+        },
     })
 }

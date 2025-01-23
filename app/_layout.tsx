@@ -30,7 +30,7 @@ export default function RootLayout() {
   return (
       <Stack screenOptions={ {headerStyle: {backgroundColor: theme.headerBackground}, headerTintColor: theme.text, headerShadowVisible: false}}>
         <Stack.Screen name="index" options={{ headerShown: false, title: "Home"}} />
-        <Stack.Screen name="shoppingBag" options={{ headerShown: true, title: "Bag"}} />
+        <Stack.Screen name="cart" options={{ headerShown: true, title: "Cart"}} />
         <Stack.Screen name="settings" options={{ headerShown: true, title: "Settings"}} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false, headerStyle: {backgroundColor: '881c1c'}}} />
 
