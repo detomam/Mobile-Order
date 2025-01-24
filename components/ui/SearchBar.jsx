@@ -7,7 +7,10 @@ export default function SearchBar(){
         <View style={styles.main}>
             <AntDesign name="search1" size={20} color="#a2aaad" style={styles.icon}/>
             <TextInput 
-            placeholder= 'Search locations and menus...' 
+            placeholder= 'Search locations and menus...'
+            selectionColor="#881c1c"
+            keyboardType="default"
+            returnKeyType="search"
             style={styles.input}></TextInput>
         </View>
     )

@@ -1,4 +1,4 @@
-import { StyleSheet, Appearance, SafeAreaView, FlatList, ScrollView, Platform, View, Text, Image } from "react-native";
+import { StyleSheet, Appearance, SafeAreaView, FlatList, ScrollView, Platform, View, Text, Pressable } from "react-native";
 import {Colors} from '@/constants/Colors';
 import {LOCATION_DATA} from "@/constants/LocationData"
 import { setStatusBarHidden } from "expo-status-bar";
@@ -13,7 +13,7 @@ export default function ListView() {
     const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
     return (
-        <Container>
+        <Container style={styles.container}>
             <FlatList 
                 data={LOCATION_DATA} 
                 keyExtractor = {(item) => item.id.toString()}
@@ -21,11 +21,16 @@ export default function ListView() {
                 contentContainerStyle = {styles.contentContainer}
                 ListEmptyComponent = {<Text>No locations available</Text>}
                 renderItem = {({ item }) => (
-                    <View style={[
-                        styles.row,
-                        item.openStatus ? styles.rowActive : styles.rowInactive
-                    ]}>
-                        <View style = {styles.textRow}>
+                    <Pressable
+                        onPress={() => alert("Location Selected!")}
+                        disabled={!item.openStatus}
+                        style={({ pressed }) => [
+                            styles.row,
+                            item.openStatus ? styles.rowActive : styles.rowInactive,
+                            pressed && styles.rowPressed,
+                        ]}
+                    >
+                        <View style={styles.textRow}>
                             <Text style={[styles.itemTitle, item.openStatus ? styles.itemTextActive : styles.itemTextInactive]}>
                                 {item.title}
                             </Text>
@@ -35,10 +40,10 @@ export default function ListView() {
                         </View>
                         <View>
                             <Text style={[styles.itemText, item.openStatus ? styles.itemTextActive : styles.itemTextInactive]}>
-                            {item.openStatus ? item.hours : 'Closed'}
+                                {item.openStatus ? item.hours : 'Closed'}
                             </Text>
                         </View>
-                    </View>
+                    </Pressable>
             )}/>
 
         </Container>
@@ -47,9 +52,12 @@ export default function ListView() {
 
 function createStyles(theme, colorScheme) {
     return StyleSheet.create({
+        container: {
+            flex: 1,
+        },
         contentContainer : {
             paddingTop: 10,
-            paddingBottom: 20,
+            paddingBottom: 50,
             width: '100%',
             // paddingHorizontal: 12,
             backgroundColor: theme.background,
@@ -66,6 +74,10 @@ function createStyles(theme, colorScheme) {
             marginHorizontal: 'auto',
             paddingHorizontal: 10,
             alignItems: 'center',
+        },
+        rowPressed: {
+            backgroundColor: "#D9D9D9",
+            // opacity: 50,
         },
         rowActive: {
             backgroundColor: theme.cardBackground,

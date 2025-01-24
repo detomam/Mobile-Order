@@ -6,8 +6,9 @@ const HomeHeaderLogo = () => (
   <Image
     source={UMassAmherstLogo}
     style={{
-      width: 200,
+      width: 150,
       height: 80,
+      marginBottom: 5,
       resizeMode: 'contain',
     }}
   />

@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
 
   decorativeBar: {
-    height: 70,
+    height: 50,
     backgroundColor: '#881c1c',
     width: '100%',
   },

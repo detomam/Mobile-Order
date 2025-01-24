@@ -1,4 +1,3 @@
-import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -6,6 +5,8 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { Appearance } from 'react-native';
 import {Colors} from '@/constants/Colors';
+import { OpenSans_400Regular, OpenSans_700Bold } from '@expo-google-fonts/open-sans';
+import { useFonts } from '@expo-google-fonts/open-sans';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -14,7 +15,7 @@ export default function RootLayout() {
   const colorScheme = Appearance.getColorScheme();
   const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    OpenSans_400Regular,
   });
 
   useEffect(() => {
