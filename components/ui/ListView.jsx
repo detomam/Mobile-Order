@@ -1,9 +1,8 @@
-import { StyleSheet, Appearance, SafeAreaView, FlatList, ScrollView, Platform, View, Text, Pressable } from "react-native";
+import { StyleSheet, Appearance, SafeAreaView, FlatList, ScrollView, Platform, View, Text, Pressable,} from "react-native";
 import {Colors} from '@/constants/Colors';
 import {LOCATION_DATA} from "@/constants/LocationData"
 import { setStatusBarHidden } from "expo-status-bar";
-import { useFonts } from '@expo-google-fonts/open-sans';
-import { OpenSans_400Regular, OpenSans_700Bold } from '@expo-google-fonts/open-sans';
+import { Link } from 'expo-router';
 
 export default function ListView() {
     const colorScheme = Appearance.getColorScheme();
@@ -21,29 +20,30 @@ export default function ListView() {
                 contentContainerStyle = {styles.contentContainer}
                 ListEmptyComponent = {<Text>No locations available</Text>}
                 renderItem = {({ item }) => (
-                    <Pressable
-                        onPress={() => alert("Location Selected!")}
-                        disabled={!item.openStatus}
-                        style={({ pressed }) => [
-                            styles.row,
-                            item.openStatus ? styles.rowActive : styles.rowInactive,
-                            pressed && styles.rowPressed,
-                        ]}
-                    >
-                        <View style={styles.textRow}>
-                            <Text style={[styles.itemTitle, item.openStatus ? styles.itemTextActive : styles.itemTextInactive]}>
-                                {item.title}
-                            </Text>
-                            <Text style={[styles.itemText, item.openStatus ? styles.itemTextActive : styles.itemTextInactive]}>
-                                {item.location}
-                            </Text>
-                        </View>
-                        <View>
-                            <Text style={[styles.itemText, item.openStatus ? styles.itemTextActive : styles.itemTextInactive]}>
-                                {item.openStatus ? item.hours : 'Closed'}
-                            </Text>
-                        </View>
-                    </Pressable>
+                    <Link href="/menu" asChild style={[styles.row, item.openStatus ? styles.rowActive : styles.rowInactive]}>
+                        <Pressable
+                            disabled={!item.openStatus}
+                            style={({ pressed }) => [
+                                styles.row,
+                                item.openStatus ? styles.rowActive : styles.rowInactive,
+                                pressed && styles.rowPressed,
+                            ]}
+                        >
+                            <View style={styles.textRow}>
+                                <Text style={[styles.itemTitle, item.openStatus ? styles.itemTextActive : styles.itemTextInactive]}>
+                                    {item.title}
+                                </Text>
+                                <Text style={[styles.itemText, item.openStatus ? styles.itemTextActive : styles.itemTextInactive]}>
+                                    {item.location}
+                                </Text>
+                            </View>
+                            <View>
+                                <Text style={[styles.itemText, item.openStatus ? styles.itemTextActive : styles.itemTextInactive]}>
+                                    {item.openStatus ? item.hours : 'Closed'}
+                                </Text>
+                            </View>
+                        </Pressable>
+                    </Link>
             )}/>
 
         </Container>

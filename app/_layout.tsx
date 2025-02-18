@@ -29,12 +29,13 @@ export default function RootLayout() {
   }
 
   return (
-      <Stack screenOptions={ {headerStyle: {backgroundColor: theme.headerBackground}, headerTintColor: theme.text, headerShadowVisible: false}}>
+      <Stack screenOptions={ {headerStyle: {backgroundColor: theme.headerBackground}, headerTintColor: theme.text, headerShadowVisible: false, headerBackTitle: 'Back'}}>
         <Stack.Screen name="index" options={{ headerShown: false, title: "Home"}} />
         <Stack.Screen name="cart" options={{ headerShown: true, title: "Cart"}} />
+        <Stack.Screen name="customization" options={{ headerShown: true, title: "Customize"}} />
+        <Stack.Screen name="menu" options={{ headerShown: true, title: "Build Your Order"}} />
         <Stack.Screen name="settings" options={{ headerShown: true, title: "Settings"}} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false, headerStyle: {backgroundColor: '881c1c'}}} />
-
         <Stack.Screen name="+not-found" options={{headerShown: false}}/>
         {/* <Stack.Screen name="index" options={{title: 'Home', headerShown: false, headerStyle: {backgroundColor: '881c1c'}}}></Stack.Screen> */}
         {/* <Stack.Screen name="shoppingBag" options={{title: 'Shopping Bag', headerStyle: {backgroundColor: '881c1c'}}}></Stack.Screen> */}

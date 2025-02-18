@@ -3,7 +3,7 @@ import React from 'react'
 import UMassAmherstImg from '@/assets/images/UMassAmherst_horiz.png'
 
 
-const shoppingBag = () => {
+const settings = () => {
   return (
     <View style={styles.container}>
       <Image source={UMassAmherstImg}></Image>
@@ -38,4 +38,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default shoppingBag
+export default settings
