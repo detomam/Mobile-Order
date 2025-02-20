@@ -14,7 +14,6 @@ const app = () => {
     <View style={styles.container}>
       <View style={styles.decorativeBar}/>
       <SearchBar></SearchBar> 
-      {/* <Text style={styles.title}>Mobile Order</Text> */}
       <ListView></ListView>
     </View>
   )
@@ -73,7 +72,7 @@ const styles = StyleSheet.create({
   },
 
   decorativeBar: {
-    height: 50,
+    height: 55,
     backgroundColor: '#881c1c',
     width: '100%',
   },

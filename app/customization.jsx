@@ -126,8 +126,8 @@ const styles = StyleSheet.create({
   },
 
   itemNameText: {
-    fontFamily: 'OpenSans_800ExtraBold',
-    fontSize: 24,
+    fontFamily: 'OpenSans_400Regular',
+    fontSize: 20,
     color: 'white',
   },
 
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   },
 
   decorativeBar: {
-    height: 60,
+    height: 55,
     backgroundColor: '#881c1c',
     width: '100%',
     justifyContent: 'center',

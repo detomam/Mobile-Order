@@ -31,7 +31,7 @@ export const LOCATION_DATA = [
         "id": 4,
         "title": "Roots Cafe",
         "hours": '7:00 AM - 9:00 PM',
-        "location": 'CHC',
+        "location": 'Commonwealth Honors College',
         "openStatus": true
     },
     {

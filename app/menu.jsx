@@ -5,11 +5,14 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {EXAMPLE_MENU} from "@/constants/ExampleMenu"
 import { Link } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 
 
 export default function Menu() {
   const [selectedOption, setSelectedOption] = useState('Entrees');
   const sectionListRef = useRef(null);
+  const { title, location } = useLocalSearchParams();
+
 
   const sectionOptions = ['Entrees', 'Cold Drinks', 'Hot Drinks'];
 
@@ -28,7 +31,8 @@ export default function Menu() {
   return (
       <View style={styles.container}>
           <View style={styles.decorativeBar}>
-            {/* <Text style={styles.itemNameText}>{name}</Text> */}
+            <Text style={styles.restaurantTitle}>{title}</Text>
+            <Text style={styles.restaurantLocation}>{location}</Text>
           </View>
           <View style = {styles.horizontalListContainer}>
             <Ionicons name="search-outline" size={20} color="#040404" style={{margin: 5}}/>
@@ -151,8 +155,23 @@ const styles = StyleSheet.create({
   },
 
   decorativeBar: {
-    height: 60,
+    height: 55,
     backgroundColor: '#881c1c',
     width: '100%',
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  restaurantTitle: {
+    fontFamily: 'OpenSans_400Regular',
+    fontSize: 20,
+    color: 'white',
+  },
+
+  restaurantLocation: {
+    fontFamily: 'OpenSans_400Regular',
+    fontSize: 15,
+    color: 'white',
   },
 })

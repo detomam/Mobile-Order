@@ -20,7 +20,11 @@ export default function ListView() {
                 contentContainerStyle = {styles.contentContainer}
                 ListEmptyComponent = {<Text>No locations available</Text>}
                 renderItem = {({ item }) => (
-                    <Link href="/menu" asChild style={[styles.row, item.openStatus ? styles.rowActive : styles.rowInactive]}>
+                    <Link 
+                        href={{ pathname: "/menu", params: { title: item.title, location: item.location} }} 
+                        asChild
+                        style={[styles.row, item.openStatus ? styles.rowActive : styles.rowInactive]}
+                    >
                         <Pressable
                             disabled={!item.openStatus}
                             style={({ pressed }) => [
