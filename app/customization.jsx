@@ -4,14 +4,14 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
 import { SelectList } from 'react-native-dropdown-select-list';
-
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Customization() {
   const sectionListRef = useRef(null);
   const { name, attributes } = useLocalSearchParams();
   const parsedAttributes = attributes ? JSON.parse(attributes) : [];
-  
+  const [selectedOptions, setSelectedOptions] = useState({});
+
   return (
       <View style={styles.container}>
             <View style={styles.decorativeBar}>
@@ -50,6 +50,15 @@ export default function Customization() {
             />
             </SafeAreaView>
           </SafeAreaProvider>
+
+          <View style={styles.fixedButtonContainer}>
+            <Pressable style={({ pressed }) => [
+              styles.addToOrderButton,
+              pressed && styles.addToOrderButtonPressed,]}
+              onPress={() => console.log("Button Pressed")}>
+              <Text style={styles.addToOrderText}>Add to Order</Text>
+            </Pressable>
+          </View>
       </View>
   );
 }
@@ -220,5 +229,36 @@ const styles = StyleSheet.create({
   sizeButtonText: {
     fontFamily: 'OpenSans_400Regular',
     fontSize: 16,
+  },
+
+  addToOrderButton: {
+    backgroundColor: '#881c1c',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    width: '55%',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+
+  addToOrderButtonPressed: {
+    transform: [{ scale: 0.95 }],
+  },
+
+  fixedButtonContainer: {
+    position: 'absolute',
+    bottom: 50,
+    width: '100%',
+    alignItems: 'center',
+  },
+
+  addToOrderText: {
+    fontFamily: 'OpenSans_400Regular',
+    fontSize: 16,
+    color: 'white',
   },
 })

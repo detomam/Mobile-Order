@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image} from 'react-native'
 import React from 'react'
 import { Pressable } from 'react-native-gesture-handler'
-
+import {AsyncStorage} from "@/utils/AsyncStorage.js"
 
 const cart = () => {
   const emptyCartMessage = "Looks like you haven’t added anything to your cart yet. Don’t worry, there’s lots of delicious options to choose from. Head to the home page to start an order!"
