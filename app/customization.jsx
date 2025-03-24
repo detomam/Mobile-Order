@@ -12,6 +12,37 @@ export default function Customization() {
   const parsedAttributes = attributes ? JSON.parse(attributes) : [];
   const [selectedOptions, setSelectedOptions] = useState({});
 
+  const handleOptionSelect = (category, value) => {
+    console.log(`Selected ${category}: ${value}`);
+    setSelectedOptions((prev) => {
+      const updatedOptions = {
+        ...prev,
+        [category]: value,
+      };
+      console.log('Updated options:', updatedOptions);
+      return updatedOptions;
+    });
+  };
+
+  const addToOrder = async () => {
+    try {
+      const newItem = {
+        name,
+        customizations: selectedOptions,
+      };
+
+      const existingCart = await AsyncStorage.getItem('cart');
+      const cart = existingCart ? JSON.parse(existingCart) : [];
+
+      cart.push(newItem);
+
+      await AsyncStorage.setItem('cart', JSON.stringify(cart));
+      console.log('Item added to cart:', newItem);
+    } catch (error) {
+      console.error('Failed to add item to cart:', error);
+    }
+  };
+
   return (
       <View style={styles.container}>
             <View style={styles.decorativeBar}>
@@ -31,14 +62,23 @@ export default function Customization() {
                   ) : section.title === "Size" ? (
                     <View style={styles.sizeButtonsContainer}>
                       {item.value.map(([sizeLabel, sizeValue], index) => (
-                        <Pressable key={index} style={styles.sizeButton} onPress={() => console.log(`Selected size: ${sizeLabel} - ${sizeValue}`)}>
+                        <Pressable
+                        key={index} 
+                        style={styles.sizeButton} 
+                        onPress={() => handleOptionSelect('Size', sizeLabel)}>
                           <Text style={styles.sizeButtonText}>{sizeLabel}</Text>
                           <Text style={styles.sizeButtonText}>{sizeValue}</Text>
                         </Pressable>
                       ))}
                     </View> 
                   ) : (
-                  <DropdownSelect options={item.value}/>
+                  <DropdownSelect 
+                  options={item.value} 
+                  category={section.title}
+                  onSelect={(category, value) => {
+                    setSelectedOptions(prev => ({ ...prev, [category]: value }));
+                  }} 
+                  />
                   )}
                 </View>
               )}
@@ -55,7 +95,7 @@ export default function Customization() {
             <Pressable style={({ pressed }) => [
               styles.addToOrderButton,
               pressed && styles.addToOrderButtonPressed,]}
-              onPress={() => console.log("Button Pressed")}>
+              onPress={addToOrder}>
               <Text style={styles.addToOrderText}>Add to Order</Text>
             </Pressable>
           </View>
@@ -63,17 +103,24 @@ export default function Customization() {
   );
 }
 
-function DropdownSelect({ options }) {
+function DropdownSelect({ options, onSelect, category }) {
   const [selectedValue, setSelectedValue] = useState("");
 
   const dropdownData = options.map((option, index) => ({
-    key: index.toString(),
+    key: option,
     value: option,
   }));
 
+  const handleSelect = (value) => {
+    const selectedOption = options.find(option => option === value);
+    console.log(`Dropdown selected for ${category}: ${selectedOption}`);
+    setSelectedValue(selectedOption);
+    onSelect(category, selectedOption);
+  };
+
   return (
     <SelectList
-      setSelected={setSelectedValue}
+      setSelected={handleSelect}
       data={dropdownData}
       save="value"
       search={false}

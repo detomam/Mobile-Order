@@ -1,16 +1,17 @@
-import { View, Text, StyleSheet, Image, Pressable} from 'react-native'
-import { Link } from 'expo-router';
-import React from 'react';
+import { View, Text, StyleSheet, Image} from 'react-native'
+import React from 'react'
+import { Pressable } from 'react-native-gesture-handler'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import CartList from '@/components/ui/CartList';
+import CartList from '@/components/ui/CartList'
 
-const cart = () => {
-  const emptyCartMessage = "Looks like you haven’t added anything to your cart yet. Don’t worry, there’s lots of delicious options to choose from. Head to the home page to start an order!"
+const confirmation = () => {
+  const orderLocation = "People's Organic Coffee, Campus Center"
   return (
     <View style={styles.container}>
       <View style={styles.decorativeBar}/>
       <View style={styles.textContainer}>
-        <Text style={styles.cartTitle}>Your Cart</Text>
+        <Text style={styles.confirmationTitle}>Your Order</Text>
+        <Text style={styles.confirmationLocation}>{orderLocation}</Text>
       </View>
       <CartList></CartList>
     </View>
@@ -47,16 +48,20 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 
-  textContainer: {
-    margin: 15,
-  },
-
-  cartTitle: {
+  confirmationTitle: {
     fontFamily: 'OpenSans_400Regular',
     fontSize: 26,
   },
 
+  confirmationLocation: {
+    fontFamily: 'OpenSans_400Regular',
+    fontSize: 15,
+  },
+
+  textContainer: {
+    margin: 15,
+  },
 })
 
 
-export default cart
+export default confirmation

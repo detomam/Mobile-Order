@@ -2,10 +2,8 @@ import { useFonts } from '@expo-google-fonts/open-sans';
 import { OpenSans_400Regular, OpenSans_700Bold } from '@expo-google-fonts/open-sans';
 import { View, Text, StyleSheet, Image, Pressable} from 'react-native'
 import React, {useState} from 'react'
-import {Link} from 'expo-router'
-import { TextInput } from 'react-native-gesture-handler'
 import SearchBar from '@/components/ui/SearchBar'
-import ListView from '@/components/ui/ListView'
+import LocationList from '@/components/ui/LocationList'
 
 const app = () => {
   const [search, setSearch] = useState('');
@@ -14,7 +12,7 @@ const app = () => {
     <View style={styles.container}>
       <View style={styles.decorativeBar}/>
       <SearchBar></SearchBar> 
-      <ListView></ListView>
+      <LocationList></LocationList>
     </View>
   )
 }

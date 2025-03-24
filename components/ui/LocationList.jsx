@@ -4,7 +4,7 @@ import {LOCATION_DATA} from "@/constants/LocationData"
 import { setStatusBarHidden } from "expo-status-bar";
 import { Link } from 'expo-router';
 
-export default function ListView() {
+export default function LocationList() {
     const colorScheme = Appearance.getColorScheme();
     const theme = colorScheme === "dark" ? Colors.dark : Colors.light;
     const styles = createStyles(theme, colorScheme)

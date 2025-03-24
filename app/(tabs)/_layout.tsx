@@ -66,6 +66,14 @@ export default function TabLayout() {
           tabBarIcon: ({focused}) => <Ionicons name={focused ? "cart" : "cart-outline"} size={28} color={'white'} />,
         }}
       />
+      <Tabs.Screen
+        name="confirmation"
+        options={{
+          title: 'Order Confirmation',
+          // href: null
+          tabBarIcon: ({focused}) => <Ionicons name={focused ? "cart" : "cart-outline"} size={28} color={'white'} />,
+        }}
+      />
     </Tabs>
   );
 }
