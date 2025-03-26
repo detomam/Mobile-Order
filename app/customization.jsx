@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet, Image, SectionList, SafeAreaView, FlatList, Pressable} from 'react-native'
 import React, { useState, useRef } from 'react';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
 import { SelectList } from 'react-native-dropdown-select-list';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CartButton from '@/components/ui/CartButton';
 
 export default function Customization() {
   const sectionListRef = useRef(null);
@@ -38,6 +38,7 @@ export default function Customization() {
 
       await AsyncStorage.setItem('cart', JSON.stringify(cart));
       console.log('Item added to cart:', newItem);
+      // router.back('/menu')
     } catch (error) {
       console.error('Failed to add item to cart:', error);
     }
@@ -98,7 +99,11 @@ export default function Customization() {
               onPress={addToOrder}>
               <Text style={styles.addToOrderText}>Add to Order</Text>
             </Pressable>
+
+            <CartButton></CartButton>
+
           </View>
+
       </View>
   );
 }
@@ -296,11 +301,31 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.95 }],
   },
 
+  cartButton: {
+    backgroundColor: '#881c1c',
+    paddingVertical: 15,
+    borderRadius: 100,
+    marginHorizontal: 17,
+    width: '15%',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+
+  cartButtonPressed: {
+    transform: [{ scale: 0.95 }],
+  },
+
   fixedButtonContainer: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 35,
     width: '100%',
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
 
   addToOrderText: {

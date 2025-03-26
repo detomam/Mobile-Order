@@ -6,13 +6,15 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {EXAMPLE_MENU} from "@/constants/ExampleMenu"
 import { Link } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router';
+import { useRouter } from 'expo-router';
+import CartButton from '@/components/ui/CartButton';
 
 
 export default function Menu() {
   const [selectedOption, setSelectedOption] = useState('Entrees');
   const sectionListRef = useRef(null);
   const { title, location } = useLocalSearchParams();
-
+  const router = useRouter();
 
   const sectionOptions = ['Entrees', 'Cold Drinks', 'Hot Drinks'];
 
@@ -78,6 +80,10 @@ export default function Menu() {
               </SectionList>
             </SafeAreaView>
           </SafeAreaProvider>
+
+          <View style={styles.fixedButtonContainer}>
+              <CartButton></CartButton>
+          </View>
       </View>
   );
 }
@@ -173,5 +179,31 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans_400Regular',
     fontSize: 15,
     color: 'white',
+  },
+
+  cartButton: {
+    backgroundColor: '#881c1c',
+    paddingVertical: 15,
+    borderRadius: 100,
+    marginHorizontal: 17,
+    width: '15%',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+
+  cartButtonPressed: {
+    transform: [{ scale: 0.95 }],
+  },
+
+  fixedButtonContainer: {
+    position: 'fixed',
+    bottom: 35,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'flex-end'
   },
 })

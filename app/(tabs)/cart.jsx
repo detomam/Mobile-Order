@@ -4,6 +4,7 @@ import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CartList from '@/components/ui/CartList';
 
+
 const cart = () => {
   const emptyCartMessage = "Looks like you haven’t added anything to your cart yet. Don’t worry, there’s lots of delicious options to choose from. Head to the home page to start an order!"
   return (

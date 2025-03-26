@@ -5,6 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import {router} from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useFocusEffect } from '@react-navigation/native';
+
 
 
 const colorScheme = Appearance.getColorScheme();
@@ -40,15 +42,16 @@ const [cartData, setCartData] = useState([]);
         }
     };
 
-    useEffect(() => {
-        const loadCart = async () => {
-            const cart = await getData('cart');
-            setCartData(cart || []);
-            console.log(cart)
-        };
-        
-        loadCart();
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+            const loadCart = async () => {
+                const cart = await getData('cart');
+                setCartData(cart || []);
+            };
+    
+            loadCart();
+        }, [])
+    );
     
     const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
     const emptyCartMessage = "Looks like you haven't added anything to your cart yet. Don't worry, there's lots of delicious options to choose from. Head to the home page to start an order!"
@@ -108,18 +111,7 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: theme.background,
     },
-    row: {
-        flexDirection: 'row',
-        width: '100%',
-        height: 75,
-        borderStyle: 'solid',
-        borderColor: colorScheme === 'dark' ? 'white' : '#a2aaad',
-        borderWidth: 0.5,
-        overflow: 'hidden',
-        marginHorizontal: 'auto',
-        paddingHorizontal: 10,
-        alignItems: 'center',
-    },
+
     rowPressed: {
         backgroundColor: "#D9D9D9",
         // opacity: 50,
@@ -194,7 +186,7 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
         overflow: 'hidden',
         marginHorizontal: 'auto',
-        paddingHorizontal: 10,
+        paddingHorizontal: 15,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },

@@ -55,4 +55,11 @@ export const LOCATION_DATA = [
         "location": 'Hampshire DC',
         "openStatus": true
     },
+    {
+        "id": 8,
+        "title": "Terrace",
+        "hours": '7:00 AM - 9:00 PM',
+        "location": 'Fieldstone Apartments',
+        "openStatus": true
+    },
 ]
