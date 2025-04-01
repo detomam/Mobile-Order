@@ -1,16 +1,20 @@
 import { View, Text, StyleSheet, Image, SectionList, SafeAreaView, FlatList, Pressable} from 'react-native'
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
 import { SelectList } from 'react-native-dropdown-select-list';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CartButton from '@/components/ui/CartButton';
+import { CartContext } from '@/utils/CartContext';
+import { Alert } from 'react-native';
+import { store } from 'expo-router/build/global-state/router-store';
 
 export default function Customization() {
   const sectionListRef = useRef(null);
-  const { name, attributes } = useLocalSearchParams();
+  const { name, attributes, restaurantName, restaurantLocation } = useLocalSearchParams();
   const parsedAttributes = attributes ? JSON.parse(attributes) : [];
   const [selectedOptions, setSelectedOptions] = useState({});
+  const { updateCartCount } = useContext(CartContext);
 
   const handleOptionSelect = (category, value) => {
     console.log(`Selected ${category}: ${value}`);
@@ -24,6 +28,28 @@ export default function Customization() {
     });
   };
 
+  const handleCartReset = (newItem) => async () => {
+    console.log("handling cart reset");
+    try {
+      await AsyncStorage.setItem('restaurantName', restaurantName);
+      await AsyncStorage.setItem('restaurantLocation', restaurantLocation);
+
+      const newCart = [newItem];
+
+      await AsyncStorage.setItem('cart', JSON.stringify(newCart));
+
+      const cart = await AsyncStorage.getItem('cart');
+
+      console.log('Item added to cart:', newItem);
+      console.log("Updated Cart Count:", cart.length);
+
+      updateCartCount(cart);
+    
+    } catch (error) {
+      console.error('Failed to add item to cart:', error);
+    }
+  }
+
   const addToOrder = async () => {
     try {
       const newItem = {
@@ -32,13 +58,37 @@ export default function Customization() {
       };
 
       const existingCart = await AsyncStorage.getItem('cart');
+      const storedRestaurantName = await AsyncStorage.getItem('restaurantName');
       const cart = existingCart ? JSON.parse(existingCart) : [];
 
-      cart.push(newItem);
+      console.log('stored restaurant name: ', storedRestaurantName)
+      console.log('new restaurant name: ', restaurantName)
 
-      await AsyncStorage.setItem('cart', JSON.stringify(cart));
-      console.log('Item added to cart:', newItem);
-      // router.back('/menu')
+      if (storedRestaurantName && storedRestaurantName !== restaurantName && cart.length !== 0) {
+        Alert.alert("Order Already in Progress", "You already have an order in progress. Would you like to clear the cart?",
+          [      
+            {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          
+            {
+              text: "Clear Cart",
+              onPress: () => handleCartReset(newItem)(),
+            }]
+        );
+      }
+
+      else {
+        cart.push(newItem)
+        await AsyncStorage.setItem('cart', JSON.stringify(cart));
+        await AsyncStorage.setItem('restaurantName', restaurantName)
+        await AsyncStorage.setItem('restaurantLocation', restaurantLocation)
+        console.log("Added to cart:", cart);
+        updateCartCount(cart);
+      }
+
     } catch (error) {
       console.error('Failed to add item to cart:', error);
     }
@@ -298,24 +348,6 @@ const styles = StyleSheet.create({
   },
 
   addToOrderButtonPressed: {
-    transform: [{ scale: 0.95 }],
-  },
-
-  cartButton: {
-    backgroundColor: '#881c1c',
-    paddingVertical: 15,
-    borderRadius: 100,
-    marginHorizontal: 17,
-    width: '15%',
-    alignItems: 'center',
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-
-  cartButtonPressed: {
     transform: [{ scale: 0.95 }],
   },
 

@@ -1,19 +1,54 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
 import { Platform, Pressable, } from 'react-native';
 import { Link } from 'expo-router'
 import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import HomeHeaderLogo from '@/components/ui/HomeHeaderLogo';
-import { OpenSans_400Regular, OpenSans_700Bold } from '@expo-google-fonts/open-sans';
-import { useFonts } from '@expo-google-fonts/open-sans';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { withBadge } from 'react-native-elements';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const [cartCount, setCartCount] = useState(0);
+
+  const loadCartCount = async () => {
+    try {
+      const cart = await AsyncStorage.getItem('cart');
+      const cartItems = cart ? JSON.parse(cart) : [];
+      setCartCount(cartItems.length);
+    } catch (error) {
+      console.error('Failed to load cart:', error);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      loadCartCount();
+      console.log(cartCount)
+    }, [])
+  );
+
+  useEffect(() => {
+    loadCartCount();
+  }, []);
+
+  const badgeStyle = {
+    backgroundColor: 'white',
+  };
+
+  const textStyle = {
+    color: 'black'
+  };
+
+  const BadgedIcon = useMemo(() => {
+    return cartCount > 0 
+      ? withBadge(cartCount, { badgeStyle, textStyle })(Ionicons) 
+      : Ionicons;
+  }, [cartCount]);
 
   return (
     <Tabs
@@ -61,7 +96,8 @@ export default function TabLayout() {
         name="cart"
         options={{
           title: 'Your Cart',
-          tabBarIcon: ({focused}) => <Ionicons name={focused ? "cart" : "cart-outline"} size={28} color={'white'} />,
+          tabBarIcon: ({focused}) => <BadgedIcon name={focused ? "cart" : "cart-outline"} size={28} color={'white'} />
+          ,
         }}
       />
       <Tabs.Screen

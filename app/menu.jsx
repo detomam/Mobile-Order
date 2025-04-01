@@ -67,7 +67,7 @@ export default function Menu() {
               showsVerticalScrollIndicator = {false}
               keyExtractor={(item, index) => item + index}
               renderItem={({item}) => (
-                <Link href={{pathname: "/customization", params: { name: item.name, attributes: JSON.stringify(item.attributes) },}} asChild>                  
+                <Link href={{pathname: "/customization", params: { name: item.name, attributes: JSON.stringify(item.attributes), restaurantName: title, restaurantLocation: location },}} asChild>                  
                   <Pressable style={styles.itemButton}>
                     <Text style={styles.itemText}>{item.name}</Text>
                   </Pressable>
@@ -179,24 +179,6 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans_400Regular',
     fontSize: 15,
     color: 'white',
-  },
-
-  cartButton: {
-    backgroundColor: '#881c1c',
-    paddingVertical: 15,
-    borderRadius: 100,
-    marginHorizontal: 17,
-    width: '15%',
-    alignItems: 'center',
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-
-  cartButtonPressed: {
-    transform: [{ scale: 0.95 }],
   },
 
   fixedButtonContainer: {

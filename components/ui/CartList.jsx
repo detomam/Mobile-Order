@@ -2,18 +2,21 @@ import { StyleSheet, Appearance, SafeAreaView, FlatList, ScrollView, Platform, V
 import {Colors} from '@/constants/Colors';
 import { Link } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {router} from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
-
+import { CartContext } from "@/utils/CartContext";
 
 
 const colorScheme = Appearance.getColorScheme();
 const theme = colorScheme === "dark" ? Colors.dark : Colors.light;
 
+
 export default function CartList() {
 const [cartData, setCartData] = useState([]);
+const { cartCount, loadCartCount, cartItems, updateCartCount} = useContext(CartContext);
+
     const getData = async (key) => {
         try {
           const value = await AsyncStorage.getItem(key);
@@ -37,6 +40,7 @@ const [cartData, setCartData] = useState([]);
             const updatedCart = cart.filter((_, index) => index !== itemIndex);
             await AsyncStorage.setItem('cart', JSON.stringify(updatedCart));
             setCartData(updatedCart);
+            updateCartCount(updatedCart)
         } catch (error) {
             console.error('Error removing item from cart:', error);
         }
@@ -87,6 +91,9 @@ const [cartData, setCartData] = useState([]);
                                     {Object.entries(item.customizations).map(([key, value]) => `${value}`).join(', ')}
                                 </Text>
                             )}
+                        </View>
+                        <View style={styles.priceContainer}>
+                          <Text style={styles.itemPrice}>$0</Text>
                         </View>
                         <Pressable onPress={() => removeItem(index)}>
                             <Ionicons name="close-outline" size={20} style={{}}></Ionicons>
@@ -198,5 +205,15 @@ const styles = StyleSheet.create({
         width: '50%',
         paddingTop: 10,
         flexGrow: 1,
+    },
+
+    itemPrice : {
+      color: 'black',
+      fontSize: 18,
+      fontFamily: 'OpenSans_400Regular',
+    },
+
+    priceContainer : {
+      marginHorizontal: 10,
     },
 })
