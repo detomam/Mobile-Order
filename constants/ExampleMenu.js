@@ -10,6 +10,7 @@ export const EXAMPLE_MENU = [
           { key: "Ingredients", value: ["Chicken", "Pesto", "Ciabatta", "Tomato"] },
           { key: "Allergens", value: ["Gluten", "Dairy", "Tree Nuts"] },
         ],
+        price: 10.50
       },
       {
         name: "Burger",
@@ -19,6 +20,7 @@ export const EXAMPLE_MENU = [
           { key: "Ingredients", value: ["Beef Patty", "Lettuce", "Tomato", "Onion", "Mayo"] },
           { key: "Allergens", value: ["Gluten", "Dairy"] },
         ],
+        price: 10.50
       },
     ],
   },
@@ -34,6 +36,7 @@ export const EXAMPLE_MENU = [
           { key: "Sweetener", value: ["Sugar", "Splenda"] },
           { key: "Extras", value: ["Extra Espresso Shot"] },
         ],
+        price: 4.50
       },
       {
         name: "Iced Latte",
@@ -44,6 +47,7 @@ export const EXAMPLE_MENU = [
           { key: "Sweetener", value: ["Sugar", "Splenda"] },
           { key: "Extras", value: ["Extra Espresso Shot"] },
         ],
+        price: 5.50
       },
     ],
   },
@@ -59,6 +63,7 @@ export const EXAMPLE_MENU = [
           { key: "Sweetener", value: ["Sugar", "Splenda"] },
           { key: "Extras", value: ["Extra Espresso Shot"] },
         ],
+        price: 4.00
       },
       {
         name: "Latte",
@@ -69,6 +74,7 @@ export const EXAMPLE_MENU = [
           { key: "Sweetener", value: ["Sugar", "Splenda"] },
           { key: "Extras", value: ["Extra Espresso Shot"] },
         ],
+        price: 5.00
       },
     ],
   },

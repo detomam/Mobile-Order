@@ -67,9 +67,14 @@ export default function Menu() {
               showsVerticalScrollIndicator = {false}
               keyExtractor={(item, index) => item + index}
               renderItem={({item}) => (
-                <Link href={{pathname: "/customization", params: { name: item.name, attributes: JSON.stringify(item.attributes), restaurantName: title, restaurantLocation: location },}} asChild>                  
+                <Link href={{pathname: "/customization", params: { name: item.name, attributes: JSON.stringify(item.attributes), price: item.price, restaurantName: title, restaurantLocation: location },}} asChild>                  
                   <Pressable style={styles.itemButton}>
-                    <Text style={styles.itemText}>{item.name}</Text>
+                    <View style={styles.itemTextContainer}>
+                      <Text style={styles.itemText}>{item.name}</Text>
+                    </View>
+                    <View style = {styles.priceContainer}>
+                      <Text style = {styles.itemPrice}>${item.price}</Text>
+                    </View>
                   </Pressable>
                 </Link>
               )}
@@ -130,6 +135,23 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 
+  itemTextContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    width: '70%',
+  },
+
+  itemPrice: {
+    fontFamily: 'OpenSans_400Regular',
+    fontSize: 18,
+    marginLeft: 50,
+  },
+
+  priceContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+
   sectionListContainer: {
     flex: 1,
     flexDirection: 'column',
@@ -138,7 +160,9 @@ const styles = StyleSheet.create({
 
   itemButton: {
     backgroundColor: '#F5F5F5',
+    flexDirection: 'row',
     paddingVertical: 20,
+    alignItems: 'center',
     marginVertical: 10,
     marginHorizontal: 15,
     borderRadius: 15,

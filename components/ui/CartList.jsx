@@ -25,14 +25,6 @@ const { cartCount, loadCartCount, cartItems, updateCartCount} = useContext(CartC
           console.error('Error retrieving data:', error);
         }
       };
-    
-    const clearCart = async (key) => {
-        try {
-          AsyncStorage.clear();
-        } catch (error) {
-          console.error('Error clearing cart:', error);
-        }
-      };
       
     const removeItem = async (itemIndex) => {
         try {
@@ -45,6 +37,8 @@ const { cartCount, loadCartCount, cartItems, updateCartCount} = useContext(CartC
             console.error('Error removing item from cart:', error);
         }
     };
+
+    
 
     useFocusEffect(
         React.useCallback(() => {
@@ -93,7 +87,7 @@ const { cartCount, loadCartCount, cartItems, updateCartCount} = useContext(CartC
                             )}
                         </View>
                         <View style={styles.priceContainer}>
-                          <Text style={styles.itemPrice}>$0</Text>
+                          <Text style={styles.itemPrice}>$ {item.price}</Text>
                         </View>
                         <Pressable onPress={() => removeItem(index)}>
                             <Ionicons name="close-outline" size={20} style={{}}></Ionicons>

@@ -11,7 +11,7 @@ import { store } from 'expo-router/build/global-state/router-store';
 
 export default function Customization() {
   const sectionListRef = useRef(null);
-  const { name, attributes, restaurantName, restaurantLocation } = useLocalSearchParams();
+  const { name, attributes, price, restaurantName, restaurantLocation } = useLocalSearchParams();
   const parsedAttributes = attributes ? JSON.parse(attributes) : [];
   const [selectedOptions, setSelectedOptions] = useState({});
   const { updateCartCount } = useContext(CartContext);
@@ -55,6 +55,7 @@ export default function Customization() {
       const newItem = {
         name,
         customizations: selectedOptions,
+        price,
       };
 
       const existingCart = await AsyncStorage.getItem('cart');
@@ -85,7 +86,7 @@ export default function Customization() {
         await AsyncStorage.setItem('cart', JSON.stringify(cart));
         await AsyncStorage.setItem('restaurantName', restaurantName)
         await AsyncStorage.setItem('restaurantLocation', restaurantLocation)
-        console.log("Added to cart:", cart);
+        console.log("Added to cart:", newItem);
         updateCartCount(cart);
       }
 
