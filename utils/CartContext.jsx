@@ -5,14 +5,16 @@ export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartCount, setCartCount] = useState(0);
+  const [cartItems, setCartItems] = useState([]);
 
   const loadCartCount = async () => {
     try {
       const cart = await AsyncStorage.getItem('cart');
-      const cartItems = cart ? JSON.parse(cart) : [];
-      setCartCount(cartItems.length);
+      const parsedCart = cart ? JSON.parse(cart) : [];
+      setCartItems(parsedCart);
+      setCartCount(parsedCart.length);
     } catch (error) {
-      console.error('Failed to load cart:', error);
+      console.error("Error loading cart from storage:", error);
     }
   };
 
@@ -20,14 +22,9 @@ export const CartProvider = ({ children }) => {
     loadCartCount();
   }, []);
 
-  const updateCartCount = async () => {
-    try {
-      const existingCart = await AsyncStorage.getItem('cart');
-      const cart = existingCart ? JSON.parse(existingCart) : [];
-      setCartCount(cart.length);
-    } catch (error) {
-      console.error('Error updating cart count:', error);
-    }
+  const updateCartCount = (newCartArray) => {
+    setCartItems(newCartArray);
+    setCartCount(newCartArray.length);
   };
 
   return (

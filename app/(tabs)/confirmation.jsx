@@ -5,7 +5,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CartList from '@/components/ui/CartList'
 
 const confirmation = () => {
-  const orderLocation = "People's Organic Coffee, Campus Center"
+  const [restaurantName, setRestaurantName] = useState('');
+  const [restaurantLocation, setRestaurantLocation] = useState('');
+  const [availableTimes, setAvailableTimes] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState({});
+
+  const getOrderInfo = async () => {
+    
+  }
+  
   return (
     <View style={styles.container}>
       <View style={styles.decorativeBar}/>

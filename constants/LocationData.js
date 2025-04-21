@@ -4,62 +4,133 @@ export const LOCATION_DATA = [
         "title": 'ISB Cafe',
         "hours": '8:00 AM - 2:30 PM',
         "location": 'Integrated Sciences Building',
-        "openStatus": false
+        "openStatus": false,
+        "availableTimes": 
+            ["8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM", "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM",
+            "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM", "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM",
+            "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM", "11:50 AM", "12:00 PM", "12:10 PM", "12:20 PM", "12:30 PM",
+            "12:40 PM", "12:50 PM", "1:00 PM", "1:10 PM", "1:20 PM", "1:30 PM", "1:40 PM", "1:50 PM", "2:00 PM", "2:10 PM",
+            "2:20 PM"]
+            
     },
     {
         "id": 1,
         "title": "People's Organic Coffee",
         "hours": '8:00 AM - 4:00 PM',
         "location": 'Campus Center',
-        "openStatus": true
+        "openStatus": true,
+        "availableTimes": 
+            ["8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM", "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM",
+            "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM", "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM",
+            "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM", "11:50 AM", "12:00 PM", "12:10 PM", "12:20 PM", "12:30 PM",
+            "12:40 PM", "12:50 PM", "1:00 PM", "1:10 PM", "1:20 PM", "1:30 PM", "1:40 PM", "1:50 PM", "2:00 PM", "2:10 PM",
+            "2:20 PM", "2:30 PM", "2:40 PM", "2:50 PM", "3:00 PM", "3:10 PM", "3:20 PM", "3:30 PM", "3:40 PM", "3:50 PM"]
     },
     {
         "id": 2,
         "title": "Peet's Coffee and Tea",
         "hours": '8:00 AM - 3:00 PM',
         "location": 'Integrative Learning Center',
-        "openStatus": false
+        "openStatus": false,
+        "availableTimes": 
+            ["8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM", "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM",
+            "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM", "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM",
+            "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM", "11:50 AM", "12:00 PM", "12:10 PM", "12:20 PM", "12:30 PM",
+            "12:40 PM", "12:50 PM", "1:00 PM", "1:10 PM", "1:20 PM", "1:30 PM", "1:40 PM", "1:50 PM", "2:00 PM", "2:10 PM",
+            "2:20 PM", "2:30 PM", "2:40 PM", "2:50 PM"]
     },
     {
         "id": 3,
         "title": "Deli Delish",
         "hours": '11:00 AM - 9:00 PM',
         "location": 'Blue Wall',
-        "openStatus": true
+        "openStatus": true,
+        "availableTimes": 
+            ["8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM", "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM",
+            "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM", "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM",
+            "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM", "11:50 AM", "12:00 PM", "12:10 PM", "12:20 PM", "12:30 PM",
+            "12:40 PM", "12:50 PM", "1:00 PM", "1:10 PM", "1:20 PM", "1:30 PM", "1:40 PM", "1:50 PM", "2:00 PM", "2:10 PM",
+            "2:20 PM", "2:30 PM", "2:40 PM", "2:50 PM", "3:00 PM", "3:10 PM", "3:20 PM", "3:30 PM", "3:40 PM", "3:50 PM"]
     },
     {
         "id": 4,
         "title": "Roots Cafe",
         "hours": '7:00 AM - 9:00 PM',
         "location": 'Commonwealth Honors College',
-        "openStatus": true
+        "openStatus": true,
+        "availableTimes": 
+            ["7:00 AM", "7:10 AM", "7:20 AM", "7:30 AM", "7:40 AM", "7:50 AM", "8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM",
+            "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM", "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM",
+            "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM", "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM",
+            "11:50 AM", "12:00 PM", "12:10 PM", "12:20 PM", "12:30 PM", "12:40 PM", "12:50 PM", "1:00 PM", "1:10 PM",
+            "1:20 PM", "1:30 PM", "1:40 PM", "1:50 PM", "2:00 PM", "2:10 PM", "2:20 PM", "2:30 PM", "2:40 PM", "2:50 PM",
+            "3:00 PM", "3:10 PM", "3:20 PM", "3:30 PM", "3:40 PM", "3:50 PM", "4:00 PM", "4:10 PM", "4:20 PM", "4:30 PM",
+            "4:40 PM", "4:50 PM", "5:00 PM", "5:10 PM", "5:20 PM", "5:30 PM", "5:40 PM", "5:50 PM", "6:00 PM", "6:10 PM",
+            "6:20 PM", "6:30 PM", "6:40 PM", "6:50 PM", "7:00 PM", "7:10 PM", "7:20 PM", "7:30 PM", "7:40 PM", "7:50 PM",
+            "8:00 PM", "8:10 PM", "8:20 PM", "8:30 PM", "8:40 PM", "8:50 PM"]
     },
     {
         "id": 5,
         "title": "Procrastination Station",
         "hours": '8:00 AM - 10:00 PM',
         "location": 'W.E.B. DuBois Library',
-        "openStatus": true
+        "openStatus": true,
+        "availableTimes":
+            ["8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM", "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM",
+            "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM", "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM",
+            "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM", "11:50 AM", "12:00 PM", "12:10 PM", "12:20 PM", "12:30 PM",
+            "12:40 PM", "12:50 PM", "1:00 PM", "1:10 PM", "1:20 PM", "1:30 PM", "1:40 PM", "1:50 PM", "2:00 PM", "2:10 PM",
+            "2:20 PM", "2:30 PM", "2:40 PM", "2:50 PM", "3:00 PM", "3:10 PM", "3:20 PM", "3:30 PM", "3:40 PM", "3:50 PM",
+            "4:00 PM", "4:10 PM", "4:20 PM", "4:30 PM", "4:40 PM", "4:50 PM", "5:00 PM", "5:10 PM", "5:20 PM", "5:30 PM",
+            "5:40 PM", "5:50 PM", "6:00 PM", "6:10 PM", "6:20 PM", "6:30 PM", "6:40 PM", "6:50 PM", "7:00 PM", "7:10 PM",
+            "7:20 PM", "7:30 PM", "7:40 PM", "7:50 PM", "8:00 PM", "8:10 PM", "8:20 PM", "8:30 PM", "8:40 PM", "8:50 PM",
+            "9:00 PM", "9:10 PM", "9:20 PM", "9:30 PM", "9:40 PM", "9:50 PM"]
     },
     {
         "id": 6,
         "title": "Worcester Cafe",
         "hours": '8:00 AM - 4:00 PM',
         "location": 'Worcester DC',
-        "openStatus": true
+        "openStatus": true,
+        "availabkeTimes": 
+            ["8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM", "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM",
+            "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM", "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM",
+            "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM", "11:50 AM", "12:00 PM", "12:10 PM", "12:20 PM", "12:30 PM",
+            "12:40 PM", "12:50 PM", "1:00 PM", "1:10 PM", "1:20 PM", "1:30 PM", "1:40 PM", "1:50 PM", "2:00 PM", "2:10 PM",
+            "2:20 PM", "2:30 PM", "2:40 PM", "2:50 PM", "3:00 PM", "3:10 PM", "3:20 PM", "3:30 PM", "3:40 PM", "3:50 PM"]
     },
     {
         "id": 7,
         "title": "Hampshire Cafe",
         "hours": '7:00 AM - 9:00 PM',
         "location": 'Hampshire DC',
-        "openStatus": true
+        "openStatus": true,
+        "availableTimes":
+            ["7:00 AM", "7:10 AM", "7:20 AM", "7:30 AM", "7:40 AM", "7:50 AM", "8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM",
+            "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM", "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM",
+            "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM", "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM",
+            "11:50 AM", "12:00 PM", "12:10 PM", "12:20 PM", "12:30 PM", "12:40 PM", "12:50 PM", "1:00 PM", "1:10 PM",
+            "1:20 PM", "1:30 PM", "1:40 PM", "1:50 PM", "2:00 PM", "2:10 PM", "2:20 PM", "2:30 PM", "2:40 PM", "2:50 PM",
+            "3:00 PM", "3:10 PM", "3:20 PM", "3:30 PM", "3:40 PM", "3:50 PM", "4:00 PM", "4:10 PM", "4:20 PM", "4:30 PM",
+            "4:40 PM", "4:50 PM", "5:00 PM", "5:10 PM", "5:20 PM", "5:30 PM", "5:40 PM", "5:50 PM", "6:00 PM", "6:10 PM",
+            "6:20 PM", "6:30 PM", "6:40 PM", "6:50 PM", "7:00 PM", "7:10 PM", "7:20 PM", "7:30 PM", "7:40 PM", "7:50 PM",
+            "8:00 PM", "8:10 PM", "8:20 PM", "8:30 PM", "8:40 PM", "8:50 PM"]
     },
     {
         "id": 8,
         "title": "Terrace",
         "hours": '7:00 AM - 9:00 PM',
         "location": 'Fieldstone Apartments',
-        "openStatus": true
+        "openStatus": true,
+        "availableTimes":
+            ["7:00 AM", "7:10 AM", "7:20 AM", "7:30 AM", "7:40 AM", "7:50 AM", "8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM",
+            "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM", "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM",
+            "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM", "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM",
+            "11:50 AM", "12:00 PM", "12:10 PM", "12:20 PM", "12:30 PM", "12:40 PM", "12:50 PM", "1:00 PM", "1:10 PM",
+            "1:20 PM", "1:30 PM", "1:40 PM", "1:50 PM", "2:00 PM", "2:10 PM", "2:20 PM", "2:30 PM", "2:40 PM", "2:50 PM",
+            "3:00 PM", "3:10 PM", "3:20 PM", "3:30 PM", "3:40 PM", "3:50 PM", "4:00 PM", "4:10 PM", "4:20 PM", "4:30 PM",
+            "4:40 PM", "4:50 PM", "5:00 PM", "5:10 PM", "5:20 PM", "5:30 PM", "5:40 PM", "5:50 PM", "6:00 PM", "6:10 PM",
+            "6:20 PM", "6:30 PM", "6:40 PM", "6:50 PM", "7:00 PM", "7:10 PM", "7:20 PM", "7:30 PM", "7:40 PM", "7:50 PM",
+            "8:00 PM", "8:10 PM", "8:20 PM", "8:30 PM", "8:40 PM", "8:50 PM"]
     },
 ]

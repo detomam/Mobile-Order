@@ -8,12 +8,13 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import HomeHeaderLogo from '@/components/ui/HomeHeaderLogo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { withBadge } from 'react-native-elements';
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useContext, useCallback, useEffect, useMemo } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
+import { CartContext } from '@/utils/CartContext';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const [cartCount, setCartCount] = useState(0);
+  const { cartCount, setCartCount } = useContext(CartContext);
 
   const loadCartCount = async () => {
     try {
@@ -24,6 +25,7 @@ export default function TabLayout() {
       console.error('Failed to load cart:', error);
     }
   };
+
 
   useFocusEffect(
     useCallback(() => {
@@ -77,15 +79,14 @@ export default function TabLayout() {
           title: 'Home',
           headerTitle: HomeHeaderLogo,
           headerRight: () => (
-            <Link href="/settings" style={{ marginHorizontal: 'auto' }} asChild>
+            <Link href="./info" style={{ marginHorizontal: 'auto' }} asChild>
               <Pressable
-                // onPress={() => alert('Button pressed!')}
                 style={{
                   marginRight: 10,
                   marginBottom: 10,
                 }}
               >
-              <Ionicons name="settings-sharp" size={28} color="#881c1c" />
+              <Ionicons name="menu-outline" size={30} color="#881c1c" />
               </Pressable>
             </Link>
           ),

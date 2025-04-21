@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router';
+import { View } from 'react-native'
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
@@ -7,6 +8,7 @@ import {Colors} from '@/constants/Colors';
 import { OpenSans_400Regular } from '@expo-google-fonts/open-sans';
 import { useFonts } from '@expo-google-fonts/open-sans';
 import { CartProvider } from '@/utils/CartContext';
+import HomeHeaderLogo from '@/components/ui/HomeHeaderLogo';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,7 +38,13 @@ export default function RootLayout() {
         <Stack.Screen name="cart" options={{ headerShown: true, title: "Cart"}} />
         <Stack.Screen name="customization" options={{ headerShown: true, title: "Customize"}} />
         <Stack.Screen name="menu" options={{ headerShown: true, title: "Build Your Order"}} />
-        <Stack.Screen name="settings" options={{ headerShown: true, title: "Settings"}} />
+        <Stack.Screen name="info" options={{ headerShown: true, headerTitle: () => (
+          <View style={{ paddingBottom: 10 }}>
+            <HomeHeaderLogo />
+          </View>
+        ),
+        }} 
+        />
         <Stack.Screen name="+not-found" options={{headerShown: false}}/>
 
       </Stack>

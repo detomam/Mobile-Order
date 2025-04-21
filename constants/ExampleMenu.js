@@ -5,24 +5,58 @@ export const EXAMPLE_MENU = [
       {
         name: "Sandwich",
         attributes: [
-          { key: "Add-Ons", value: ["Potato Chips", "Fountain Beverage"] },
-          { key: "Modifications", value: ["No Pesto", "No Tomato", "Gluten-Free Bread"] },
-          { key: "Ingredients", value: ["Chicken", "Pesto", "Ciabatta", "Tomato"] },
-          { key: "Allergens", value: ["Gluten", "Dairy", "Tree Nuts"] },
+          { key: "Add-Ons", value: [
+            { key: "Potato Chips", value: "Potato Chips" },
+            { key: "Fountain Beverage", value: "Fountain Beverage" }
+          ]},
+          { key: "Modifications", value: [
+            { key: "No Pesto", value: "No Pesto" },
+            { key: "No Tomato", value: "No Tomato" },
+            { key: "Gluten-Free Bread", value: "Gluten-Free Bread" }
+          ]},
+          { key: "Ingredients", value: [
+            { key: "Chicken", value: "Chicken" },
+            { key: "Pesto", value: "Pesto" },
+            { key: "Ciabatta", value: "Ciabatta" },
+            { key: "Tomato", value: "Tomato" }
+          ]},
+          { key: "Allergens", value: [
+            { key: "Gluten", value: "Gluten" },
+            { key: "Dairy", value: "Dairy" },
+            { key: "Tree Nuts", value: "Tree Nuts" }
+          ]}
         ],
         price: 10.50
       },
       {
         name: "Burger",
         attributes: [
-          { key: "Add-Ons", value: ["Potato Chips", "Fountain Beverage"] },
-          { key: "Modifications", value: ["No Tomato", "No Lettuce", "No Mayo", "No Onion", "Gluten-Free Bun"] },
-          { key: "Ingredients", value: ["Beef Patty", "Lettuce", "Tomato", "Onion", "Mayo"] },
-          { key: "Allergens", value: ["Gluten", "Dairy"] },
+          { key: "Add-Ons", value: [
+            { key: "Potato Chips", value: "Potato Chips" },
+            { key: "Fountain Beverage", value: "Fountain Beverage" }
+          ]},
+          { key: "Modifications", value: [
+            { key: "No Tomato", value: "No Tomato" },
+            { key: "No Lettuce", value: "No Lettuce" },
+            { key: "No Mayo", value: "No Mayo" },
+            { key: "No Onion", value: "No Onion" },
+            { key: "Gluten-Free Bun", value: "Gluten-Free Bun" }
+          ]},
+          { key: "Ingredients", value: [
+            { key: "Beef Patty", value: "Beef Patty" },
+            { key: "Lettuce", value: "Lettuce" },
+            { key: "Tomato", value: "Tomato" },
+            { key: "Onion", value: "Onion" },
+            { key: "Mayo", value: "Mayo" }
+          ]},
+          { key: "Allergens", value: [
+            { key: "Gluten", value: "Gluten" },
+            { key: "Dairy", value: "Dairy" }
+          ]}
         ],
         price: 10.50
-      },
-    ],
+      }
+    ]
   },
   {
     title: "Cold Drinks",
@@ -30,26 +64,74 @@ export const EXAMPLE_MENU = [
       {
         name: "Iced Coffee",
         attributes: [
-          { key: "Size", value: [["Medium", "16 oz"], ["Large", "20 oz"]] },
-          { key: "Milk", value: ["Skim", "Two Percent", "Half and Half", "Almond", "Soy", "Oat"] },
-          { key: "Flavored Syrups and Sauces", value: ["Vanilla", "Caramel", "Hazelnut", "Peppermint", "Mocha", "White Mocha", "Sugar-Free Vanilla"] },
-          { key: "Sweetener", value: ["Sugar", "Splenda"] },
-          { key: "Extras", value: ["Extra Espresso Shot"] },
+          { key: "Size", value: [
+            ["Medium", "16 oz"],
+            ["Large", "20 oz"]]
+          },
+          { key: "Milk", value: [
+            { key: "Whole", value: "Whole" },
+            { key: "Skim", value: "Skim" },
+            { key: "Two Percent", value: "Two Percent" },
+            { key: "Half and Half", value: "Half and Half" },
+            { key: "Almond", value: "Almond" },
+            { key: "Soy", value: "Soy" },
+            { key: "Oat", value: "Oat" }
+          ]},
+          { key: "Flavored Syrups and Sauces", value: [
+            { key: "Vanilla", value: "Vanilla" },
+            { key: "Caramel", value: "Caramel" },
+            { key: "Hazelnut", value: "Hazelnut" },
+            { key: "Peppermint", value: "Peppermint" },
+            { key: "Mocha", value: "Mocha" },
+            { key: "White Mocha", value: "White Mocha" },
+            { key: "Sugar-Free Vanilla", value: "Sugar-Free Vanilla" }
+          ]},
+          { key: "Sweetener", value: [
+            { key: "Sugar", value: "Sugar" },
+            { key: "Splenda", value: "Splenda" }
+          ]},
+          { key: "Extras", value: [
+            { key: "Extra Espresso Shot", value: "Extra Espresso Shot" }
+          ]}
         ],
         price: 4.50
       },
       {
         name: "Iced Latte",
         attributes: [
-          { key: "Size", value: [["Medium", "16 oz"], ["Large", "20 oz"]] },
-          { key: "Milk", value: ["Skim", "Two Percent", "Half and Half", "Almond", "Soy", "Oat"] },
-          { key: "Flavored Syrups and Sauces", value: ["Vanilla", "Caramel", "Hazelnut", "Peppermint", "Mocha", "White Mocha", "Sugar-Free Vanilla"] },
-          { key: "Sweetener", value: ["Sugar", "Splenda"] },
-          { key: "Extras", value: ["Extra Espresso Shot"] },
+          { key: "Size", value: [
+            ["Medium", "16 oz"],
+            ["Large", "20 oz"]]
+          },
+          { key: "Milk", value: [
+            { key: "Whole", value: "Whole" },
+            { key: "Skim", value: "Skim" },
+            { key: "Two Percent", value: "Two Percent" },
+            { key: "Half and Half", value: "Half and Half" },
+            { key: "Almond", value: "Almond" },
+            { key: "Soy", value: "Soy" },
+            { key: "Oat", value: "Oat" }
+          ]},
+          { key: "Flavored Syrups and Sauces", value: [
+            { key: "Vanilla", value: "Vanilla" },
+            { key: "Caramel", value: "Caramel" },
+            { key: "Hazelnut", value: "Hazelnut" },
+            { key: "Peppermint", value: "Peppermint" },
+            { key: "Mocha", value: "Mocha" },
+            { key: "White Mocha", value: "White Mocha" },
+            { key: "Sugar-Free Vanilla", value: "Sugar-Free Vanilla" }
+          ]},
+          { key: "Sweetener", value: [
+            { key: "Sugar", value: "Sugar" },
+            { key: "Splenda", value: "Splenda" }
+          ]},
+          { key: "Extras", value: [
+            { key: "Extra Espresso Shot", value: "Extra Espresso Shot" }
+          ]}
         ],
         price: 5.50
-      },
-    ],
+      }
+    ]
   },
   {
     title: "Hot Drinks",
@@ -57,25 +139,75 @@ export const EXAMPLE_MENU = [
       {
         name: "Coffee",
         attributes: [
-          { key: "Size", value: [["Small", "12 oz"], ["Medium", "16 oz"], ["Large", "20 oz"]] },
-          { key: "Milk", value: ["Skim", "Two Percent", "Half and Half", "Almond", "Soy", "Oat"] },
-          { key: "Flavored Syrups and Sauces", value: ["Vanilla", "Caramel", "Hazelnut", "Peppermint", "Mocha", "White Mocha", "Sugar-Free Vanilla"] },
-          { key: "Sweetener", value: ["Sugar", "Splenda"] },
-          { key: "Extras", value: ["Extra Espresso Shot"] },
+          { key: "Size", value: [
+            ["Small", "12 oz"],
+            ["Medium", "16 oz"],
+            ["Large", "20 oz"]]
+          },
+          { key: "Milk", value: [
+            { key: "Whole", value: "Whole" },
+            { key: "Skim", value: "Skim" },
+            { key: "Two Percent", value: "Two Percent" },
+            { key: "Half and Half", value: "Half and Half" },
+            { key: "Almond", value: "Almond" },
+            { key: "Soy", value: "Soy" },
+            { key: "Oat", value: "Oat" }
+          ]},
+          { key: "Flavored Syrups and Sauces", value: [
+            { key: "Vanilla", value: "Vanilla" },
+            { key: "Caramel", value: "Caramel" },
+            { key: "Hazelnut", value: "Hazelnut" },
+            { key: "Peppermint", value: "Peppermint" },
+            { key: "Mocha", value: "Mocha" },
+            { key: "White Mocha", value: "White Mocha" },
+            { key: "Sugar-Free Vanilla", value: "Sugar-Free Vanilla" }
+          ]},
+          { key: "Sweetener", value: [
+            { key: "Sugar", value: "Sugar" },
+            { key: "Splenda", value: "Splenda" }
+          ]},
+          { key: "Extras", value: [
+            { key: "Extra Espresso Shot", value: "Extra Espresso Shot" }
+          ]}
         ],
         price: 4.00
       },
       {
         name: "Latte",
         attributes: [
-          { key: "Size", value: [["Small", "12 oz"], ["Medium", "16 oz"], ["Large", "20 oz"]] },
-          { key: "Milk", value: ["Skim", "Two Percent", "Half and Half", "Almond", "Soy", "Oat"] },
-          { key: "Flavored Syrups and Sauces", value: ["Vanilla", "Caramel", "Hazelnut", "Peppermint", "Mocha", "White Mocha", "Sugar-Free Vanilla"] },
-          { key: "Sweetener", value: ["Sugar", "Splenda"] },
-          { key: "Extras", value: ["Extra Espresso Shot"] },
+          { key: "Size", value: [
+            ["Small", "12 oz"],
+            ["Medium", "16 oz"],
+            ["Large", "20 oz"]]
+          },
+          { key: "Milk", value: [
+            { key: "Whole", value: "Whole" },
+            { key: "Skim", value: "Skim" },
+            { key: "Two Percent", value: "Two Percent" },
+            { key: "Half and Half", value: "Half and Half" },
+            { key: "Almond", value: "Almond" },
+            { key: "Soy", value: "Soy" },
+            { key: "Oat", value: "Oat" }
+          ]},
+          { key: "Flavored Syrups and Sauces", value: [
+            { key: "Vanilla", value: "Vanilla" },
+            { key: "Caramel", value: "Caramel" },
+            { key: "Hazelnut", value: "Hazelnut" },
+            { key: "Peppermint", value: "Peppermint" },
+            { key: "Mocha", value: "Mocha" },
+            { key: "White Mocha", value: "White Mocha" },
+            { key: "Sugar-Free Vanilla", value: "Sugar-Free Vanilla" }
+          ]},
+          { key: "Sweetener", value: [
+            { key: "Sugar", value: "Sugar" },
+            { key: "Splenda", value: "Splenda" }
+          ]},
+          { key: "Extras", value: [
+            { key: "Extra Espresso Shot", value: "Extra Espresso Shot" }
+          ]}
         ],
         price: 5.00
-      },
-    ],
-  },
+      }
+    ]
+  }
 ];

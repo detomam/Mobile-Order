@@ -15,12 +15,17 @@ export default function Alert() {
       {text: 'OK', onPress: () => console.log('OK Pressed')},
     ]);
 
+    const createOneButtonAlert = () =>
+      Alert.alert('Alert Title', 'My Alert Msg', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+
 
     return (
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
           <Button title={'2-Button Alert'} onPress={createTwoButtonAlert} />
-          <Button title={'3-Button Alert'} onPress={createThreeButtonAlert} />
+          <Button title={'1-Button Alert'} onPress={createOneButtonAlert} />
         </SafeAreaView>
       </SafeAreaProvider>
     );

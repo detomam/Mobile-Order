@@ -73,7 +73,7 @@ export default function Menu() {
                       <Text style={styles.itemText}>{item.name}</Text>
                     </View>
                     <View style = {styles.priceContainer}>
-                      <Text style = {styles.itemPrice}>${item.price}</Text>
+                      <Text style = {styles.itemPrice}>${parseFloat(item.price).toFixed(2)}</Text>
                     </View>
                   </Pressable>
                 </Link>
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   itemPrice: {
     fontFamily: 'OpenSans_400Regular',
     fontSize: 18,
-    marginLeft: 50,
+    marginLeft: 45,
   },
 
   priceContainer: {

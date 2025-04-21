@@ -63,14 +63,12 @@ function createStyles(theme, colorScheme) {
             paddingTop: 10,
             paddingBottom: 50,
             width: '100%',
-            // paddingHorizontal: 12,
             backgroundColor: theme.background,
         },
         row: {
             flexDirection: 'row',
             width: '100%',
             height: 75,
-            // marginBottom: 10,
             borderStyle: 'solid',
             borderColor: colorScheme === 'dark' ? 'white' : '#a2aaad',
             borderWidth: 0.5,
@@ -81,7 +79,6 @@ function createStyles(theme, colorScheme) {
         },
         rowPressed: {
             backgroundColor: "#D9D9D9",
-            // opacity: 50,
         },
         rowActive: {
             backgroundColor: theme.cardBackground,

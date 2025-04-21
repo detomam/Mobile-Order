@@ -1,20 +1,22 @@
-import { View, Text, StyleSheet, Image, SectionList, SafeAreaView, FlatList, Pressable} from 'react-native'
+import { View, Text, StyleSheet, Image, SectionList, SafeAreaView, FlatList, Pressable, Animated} from 'react-native'
 import React, { useState, useRef, useContext } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
-import { SelectList } from 'react-native-dropdown-select-list';
+import { SelectList, MultipleSelectList } from 'react-native-dropdown-select-list';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CartButton from '@/components/ui/CartButton';
+import FavoriteButton from '@/components/ui/FavoriteButton';
 import { CartContext } from '@/utils/CartContext';
 import { Alert } from 'react-native';
-import { store } from 'expo-router/build/global-state/router-store';
+import MultiSelect from 'react-native-multiple-select';
 
 export default function Customization() {
   const sectionListRef = useRef(null);
   const { name, attributes, price, restaurantName, restaurantLocation } = useLocalSearchParams();
   const parsedAttributes = attributes ? JSON.parse(attributes) : [];
   const [selectedOptions, setSelectedOptions] = useState({});
-  const { updateCartCount } = useContext(CartContext);
+  const {cartCount, updateCartCount } = useContext(CartContext);
+  const [isFavorited, setIsFavorited] = useState(false);
 
   const handleOptionSelect = (category, value) => {
     console.log(`Selected ${category}: ${value}`);
@@ -22,6 +24,36 @@ export default function Customization() {
       const updatedOptions = {
         ...prev,
         [category]: value,
+      };
+      console.log('Updated options:', updatedOptions);
+      return updatedOptions;
+    });
+  };
+
+  const handleMultiSelectChange = (category, value) => {
+    let finalValue = value;
+  
+    if (typeof value === 'function') {
+      try {
+        finalValue = value();
+      } catch (err) {
+        console.warn(`[handleMultiSelectChange] function could not be executed for ${category}`);
+        finalValue = [];
+      }
+    }
+  
+    // Handle if value is null or undefined
+    if (!finalValue) {
+      console.warn(`[handleMultiSelectChange] value is null or undefined for ${category}`);
+      finalValue = [];
+    }
+  
+    console.log(`[handleMultiSelectChange] category: ${category}, value:`, finalValue);
+  
+    setSelectedOptions((prev) => {
+      const updatedOptions = {
+        ...prev,
+        [category]: Array.isArray(finalValue) ? [...finalValue] : [finalValue],
       };
       console.log('Updated options:', updatedOptions);
       return updatedOptions;
@@ -41,7 +73,7 @@ export default function Customization() {
       const cart = await AsyncStorage.getItem('cart');
 
       console.log('Item added to cart:', newItem);
-      console.log("Updated Cart Count:", cart.length);
+      console.log("Updated Cart Count:", cartCount);
 
       updateCartCount(cart);
     
@@ -95,6 +127,40 @@ export default function Customization() {
     }
   };
 
+  const toggleFavorite = async () => {
+    try {
+      const existingFavorites = await AsyncStorage.getItem('favorites');
+      const favorites = existingFavorites ? JSON.parse(existingFavorites) : [];
+  
+      const currentItem = {
+        name,
+        customizations: selectedOptions,
+        price,
+      };
+  
+      const matchIndex = favorites.findIndex(fav =>
+        fav.name === currentItem.name &&
+        fav.price === currentItem.price &&
+        JSON.stringify(fav.customizations) === JSON.stringify(currentItem.customizations)
+      );
+  
+      if (matchIndex > -1) {
+        favorites.splice(matchIndex, 1);
+        await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
+        setIsFavorited(false);
+        console.log("Removed from favorites:", currentItem);
+      } else {
+        favorites.push(currentItem);
+        await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
+        setIsFavorited(true);
+        console.log("Added to favorites:", currentItem);
+      }
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
+  };
+  
+
   return (
       <View style={styles.container}>
             <View style={styles.decorativeBar}>
@@ -110,7 +176,9 @@ export default function Customization() {
               renderItem={({ item, section }) => (
                 <View>
                   {section.title === "Ingredients" || section.title === "Allergens" ? (
-                    <Text style={styles.ingredientText}>{item.value.join(", ")}</Text> 
+                      <Text style={styles.ingredientText}>
+                        {item.value.map((entry) => entry.value).join(", ")}
+                      </Text> 
                   ) : section.title === "Size" ? (
                     <View style={styles.sizeButtonsContainer}>
                       {item.value.map(([sizeLabel, sizeValue], index) => (
@@ -124,13 +192,17 @@ export default function Customization() {
                       ))}
                     </View> 
                   ) : (
-                  <DropdownSelect 
+                  <DropdownMultipleSelect 
                   options={item.value} 
                   category={section.title}
-                  onSelect={(category, value) => {
-                    setSelectedOptions(prev => ({ ...prev, [category]: value }));
-                  }} 
+                  onSelect={handleMultiSelectChange}
                   />
+                  // <SelectList 
+                  // data={item.value} 
+                  // category={section.title} 
+                  // setSelected={setSelectedOptions}
+                  // boxStyles={styles.dropdownBox}
+                  // dropdownStyles={styles.dropdown}/>
                   )}
                 </View>
               )}
@@ -143,7 +215,14 @@ export default function Customization() {
             </SafeAreaView>
           </SafeAreaProvider>
 
+
           <View style={styles.fixedButtonContainer}>
+
+            <FavoriteButton   
+              onPress={toggleFavorite}
+              isFavorited={isFavorited}>
+            </FavoriteButton>
+
             <Pressable style={({ pressed }) => [
               styles.addToOrderButton,
               pressed && styles.addToOrderButtonPressed,]}
@@ -167,11 +246,9 @@ function DropdownSelect({ options, onSelect, category }) {
     value: option,
   }));
 
-  const handleSelect = (value) => {
-    const selectedOption = options.find(option => option === value);
-    console.log(`Dropdown selected for ${category}: ${selectedOption}`);
-    setSelectedValue(selectedOption);
-    onSelect(category, selectedOption);
+  const handleSelect = (selected) => {
+    setSelectedValue(selected);
+    onSelect(category, selected);
   };
 
   return (
@@ -184,7 +261,103 @@ function DropdownSelect({ options, onSelect, category }) {
       boxStyles={styles.dropdownBox}
       dropdownStyles={styles.dropdown}
       placeholderStyles={styles.itemText}
+      fontFamily='OpenSans_400Regular'
     />
+  );
+}
+
+function DropdownMultipleSelect({ options, onSelect, category }) {
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [dropdownAnim] = useState(new Animated.Value(0));
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  
+  const dropdownData = options.map((option) => ({
+    id: option.key,
+    name: option.value,
+  }));
+
+  const slideDown = () => {
+    setDropdownVisible(true);
+    Animated.timing(dropdownAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  };
+  
+  const slideUp = () => {
+    Animated.timing(dropdownAnim, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start(() => {
+      setDropdownVisible(false);
+    });
+  };
+
+  const dropdownTranslateY = dropdownAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-20, 0],
+  });
+  
+  const dropdownOpacity = dropdownAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
+
+  const handleSelectionChange = (selectedIds) => {
+    setSelectedItems(selectedIds);
+    console.log(`[DropdownMultipleSelect] ${category} selected:`, selectedIds);
+    onSelect(category, selectedIds);
+  };
+
+  const selectedNames = dropdownData
+    .filter((item) => selectedItems.includes(item.id))
+    .map((item) => item.name)
+    .join(", ");
+
+  const customSelectText =
+    selectedItems.length > 0
+      ? `${selectedNames}`
+      : `Select ${category}`;
+
+  return (
+    <View style={{marginVertical: 10 }}>
+      <MultiSelect
+        items={dropdownData}
+        uniqueKey="id"
+        onSelectedItemsChange={handleSelectionChange}
+        selectedItems={selectedItems}
+        selectText={customSelectText}
+        displayKey="name"
+        searchInputPlaceholderText="Search..."
+        hideSubmitButton={true}
+        hideDropdown={true}
+        hideTags={true}
+        selectedItemTextColor="#881c1c"
+        selectedItemIconColor="#881c1c"
+        itemTextColor="#000"
+        searchInputStyle={{height: 0, display: 'none', flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}
+        styleTextDropdown={styles.itemText}
+        searchIcon={false}
+        styleTextDropdownSelected={styles.itemText}
+        fontFamily='OpenSans_400Regular'
+        styleInputGroup={{
+          flexDirection: 'row-reverse',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingHorizontal: 10,
+        }}
+        styleDropdownMenuSubsection={styles.multiDropdownBox}
+        styleItemsContainer={styles.multiDropdown}
+        styleRowText={{
+          fontFamily: 'OpenSans_400Regular',
+          fontSize: 16,
+          color: '#000',
+        }}
+
+      />
+    </View>
   );
 }
 
@@ -195,6 +368,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     backgroundColor: 'white',
+    paddingBottom: 90,
   },
   horizontalListContainer : {
     flexDirection: 'row',
@@ -227,8 +401,9 @@ const styles = StyleSheet.create({
 
   itemText: {
     fontFamily: 'OpenSans_400Regular',
+    color: 'black',
     fontSize: 18,
-    marginLeft: 10,
+    marginHorizontal: 10,
   },
 
   ingredientText: {
@@ -246,6 +421,7 @@ const styles = StyleSheet.create({
   sectionListContainer: {
     flex: 1,
     flexDirection: 'column',
+    backgroundColor: 'none',
     width: '100%',
   },
 
@@ -268,15 +444,16 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingBottom: 5,
     marginTop: 15,
+    marginBottom: 5,
     fontSize: 24,
     fontFamily: 'OpenSans_400Regular',
     backgroundColor: 'white',
   },
 
-  dropdownBox: {
+  multiDropdownBox: {
     backgroundColor: '#F5F5F5',
     marginHorizontal: 15,
-    marginBottom: 5,
+    marginTop: 5,
     borderRadius: 15,
     borderColor: '#D9D9D9',
     elevation: 3,
@@ -286,16 +463,15 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     height: 60,
     alignItems: 'center',
-    fontFamily: 'OpenSans_400Regular',
-
   },
-  dropdown: {
-    backgroundColor: "white",
-    borderColor: "white",
-    marginBottom: 10,
-    marginHorizontal: 15,
-    fontFamily: 'OpenSans_400Regular',
 
+  multiDropdown: {
+    backgroundColor: 'white',
+    borderColor: "#D9D9D9",
+    borderRadius: 25,
+    borderWidth: 1,
+    marginHorizontal: 15,
+    paddingVertical: 5,
   },
 
   decorativeBar: {
@@ -359,6 +535,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    backgroundColor: 'none',
   },
 
   addToOrderText: {
