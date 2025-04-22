@@ -64,7 +64,7 @@ const cart = () => {
     } catch (error) {
       console.error('Failed to place order:', error);
     }
-    router.push('/confirmation')
+    // router.push('/confirmation')
 
   };
 

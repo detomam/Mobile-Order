@@ -12,6 +12,7 @@ export default function FavoritesInfoButton(){
         styles.button,
         pressed && styles.buttonPressed,
         ]}
+        onPress={() => router.navigate('../favorites')}
       >
         <Ionicons
             name='heart'

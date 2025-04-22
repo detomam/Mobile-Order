@@ -136,6 +136,7 @@ export default function Customization() {
         name,
         customizations: selectedOptions,
         price,
+        restaurant: restaurantName,
       };
   
       const matchIndex = favorites.findIndex(fav =>
@@ -197,12 +198,6 @@ export default function Customization() {
                   category={section.title}
                   onSelect={handleMultiSelectChange}
                   />
-                  // <SelectList 
-                  // data={item.value} 
-                  // category={section.title} 
-                  // setSelected={setSelectedOptions}
-                  // boxStyles={styles.dropdownBox}
-                  // dropdownStyles={styles.dropdown}/>
                   )}
                 </View>
               )}
