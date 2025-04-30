@@ -13,7 +13,7 @@ const colorScheme = Appearance.getColorScheme();
 const theme = colorScheme === "dark" ? Colors.dark : Colors.light;
 
 
-export default function CartList() {
+export default function CartList({ onTotalCalculated }) {
 const [cartData, setCartData] = useState([]);
 const { cartCount, loadCartCount, cartItems, updateCartCount} = useContext(CartContext);
 
@@ -48,6 +48,10 @@ const { cartCount, loadCartCount, cartItems, updateCartCount} = useContext(CartC
             loadCart();
         }, [])
     );
+
+    useEffect(() => {
+      onTotalCalculated(orderTotal);
+    }, [orderTotal]);
     
     const emptyCartMessage = "Looks like you haven't added anything to your cart yet. Don't worry, there's lots of delicious options to choose from. Head to the home page to start an order!"
 

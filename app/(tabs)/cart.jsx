@@ -9,20 +9,26 @@ import { LOCATION_DATA } from '@/constants/LocationData';
 import { PAYMENT_METHODS } from '@/constants/PaymentMethods';
 import { Alert } from 'react-native';
 import { useRouter } from 'expo-router';
+import { sendOrder } from '@/utils/api';
+import { sendOrderViaWebSocket, connectWebSocket } from '@/utils/websocket';
+import { ActivityIndicator } from 'react-native';
 
 const cart = () => {
   const { cartCount, loadCartCount, cartItems} = useContext(CartContext);
+  const [orderTotal, setOrderTotal] = useState(0);
   const [restaurantName, setRestaurantName] = useState('');
   const [restaurantLocation, setRestaurantLocation] = useState('');
   const [availableTimes, setAvailableTimes] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState({});
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
       loadCartCount();
     }, [])
   );
+
 
   const placeOrder = async () => {
 
@@ -36,7 +42,10 @@ const cart = () => {
       );
       return;
     }
-  
+
+    setLoading(true);
+    const delay = 3000;
+    setTimeout(async () => {
     try {
       const existingCart = await AsyncStorage.getItem('cart');
       const storedRestaurantName = await AsyncStorage.getItem('restaurantName');
@@ -48,7 +57,13 @@ const cart = () => {
           name: item.name,
           quantity: 1,
           customizations: item.customizations || {},
+          price: item.price,
         })),
+        orderTotal: cart.reduce((sum, item) => {
+          const price = parseFloat(item.price);
+          const quantity = item.quantity ? parseInt(item.quantity) : 1;
+          return !isNaN(price) && !isNaN(quantity) ? sum + price * quantity : sum;
+        }, 0),
         customerName: 'Michaela DeToma',
         restaurantName: storedRestaurantName || "",
         pickupTime: selectedOptions.pickupTime || "Not selected",
@@ -61,12 +76,34 @@ const cart = () => {
       console.log('cart items added to order')
       console.log(formattedOrder)
 
+      const response = await sendOrder(order);
+      console.log("REST API Response:", JSON.stringify(response, null, 2));
+      sendOrderViaWebSocket(order);
+      router.push({
+        pathname: '/confirmation',
+        params: {
+          message: response.message,
+          orderNumber: response.order_data.orderNumber,
+          orderTotal: cart.reduce((sum, item) => {
+            const price = parseFloat(item.price);
+            const quantity = item.quantity ? parseInt(item.quantity) : 1;
+            return !isNaN(price) && !isNaN(quantity) ? sum + price * quantity : sum;
+          }, 0),
+          items: JSON.stringify(response.order_data.items),
+          restaurantName: response.order_data.restaurantName,
+          pickupTime: response.order_data.pickupTime,
+        }
+      });
+      setLoading(false);
+      AsyncStorage.removeItem('cart')
+      AsyncStorage.removeItem('order')
+
     } catch (error) {
       console.error('Failed to place order:', error);
+      setLoading(false);
     }
-    // router.push('/confirmation')
-
-  };
+  }, delay);
+};
 
   useEffect(() => {
     const loadLocation = async () => {
@@ -111,6 +148,15 @@ const cart = () => {
 
   const emptyCartMessage = "Looks like you haven’t added anything to your cart yet. Don’t worry, there’s lots of delicious options to choose from. Head to the home page to start an order!"
   
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#881c1c" />
+        <Text style={styles.loadingText}>One moment while we place your order...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: 'white'}}>
     <ScrollView>
@@ -125,7 +171,7 @@ const cart = () => {
             </>
           )}
         </View>
-        <CartList></CartList>
+        <CartList onTotalCalculated={setOrderTotal} />
       {cartCount > 0 && (
       <View style={[styles.orderDetails, cartCount === 0 && { display: 'none' }]}>
         <View style={styles.pickupTitleContainer}>
@@ -323,6 +369,21 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans_400Regular',
     fontSize: 16,
     color: 'white',
+  },
+
+  loadingContainer: {
+    flex: 1,
+    paddingBottom: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  
+  loadingText: {
+    marginTop: 15,
+    fontSize: 16,
+    fontFamily: 'OpenSans_400Regular',
+    color: '#333',
   },
 
 })

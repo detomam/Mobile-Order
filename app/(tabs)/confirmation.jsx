@@ -1,27 +1,79 @@
-import { View, Text, StyleSheet, Image} from 'react-native'
-import React from 'react'
-import { Pressable } from 'react-native-gesture-handler'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import CartList from '@/components/ui/CartList'
+import { View, Text, StyleSheet, ScrollView, Pressable} from 'react-native'
+import { useLocalSearchParams } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useContext, useCallback } from 'react';
+import { CartContext } from '@/utils/CartContext';
+import {router} from 'expo-router';
 
 const confirmation = () => {
-  const [restaurantName, setRestaurantName] = useState('');
-  const [restaurantLocation, setRestaurantLocation] = useState('');
-  const [availableTimes, setAvailableTimes] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState({});
+  const { items, orderNumber, restaurantName, pickupTime, orderTotal } = useLocalSearchParams();
+  const parsedItems = items ? JSON.parse(items) : [];
+  const parsedOrderTotal = orderTotal ? parseFloat(orderTotal) : 0;
+  const { updateCartCount } = useContext(CartContext);
 
-  const getOrderInfo = async () => {
-    
-  }
-  
+  useFocusEffect(
+    useCallback(() => {
+      updateCartCount([]);
+    }, [])
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.decorativeBar}/>
       <View style={styles.textContainer}>
-        <Text style={styles.confirmationTitle}>Your Order</Text>
-        <Text style={styles.confirmationLocation}>{orderLocation}</Text>
+        <Text style={styles.confirmationTitle}>Your Order is Confirmed!</Text>
       </View>
-      <CartList></CartList>
+      <ScrollView>
+      {parsedItems.map((item, index) => (
+        <React.Fragment key={index}>
+        
+        <View style={styles.row}>
+          <View style={styles.cartItem}>
+            <Text style={styles.itemTitle}>{item.name}</Text>
+            {item.customizations && Object.keys(item.customizations).length > 0 && (
+              <View style={{ marginTop: 5 }}>
+                {Object.entries(item.customizations).map(([category, value], i) => {
+                  const isEmpty = value == null ||
+                    (Array.isArray(value) && value.length === 0) ||
+                    (typeof value === 'string' && value.trim() === '');
+
+                  if (isEmpty) return null;
+
+                  return (
+                    <Text key={i} style={styles.itemText}>
+                      {category}: {Array.isArray(value) ? value.join(', ') : value}
+                    </Text>
+                  );
+                })}
+              </View>
+            )}
+          </View>
+          <View style={styles.priceContainer}>
+            <Text style={styles.itemPrice}>$ {parseFloat(item.price).toFixed(2)}</Text>
+          </View>
+        </View>
+        </React.Fragment>
+      ))}
+      <View style={styles.orderTotalContainer}>
+          <Text style={styles.orderTotal}>Total: $ {parsedOrderTotal.toFixed(2)}</Text>
+      </View>
+      <View style={styles.textContainer}>
+        <Text style={styles.text}>Order Number: {orderNumber}</Text>
+        <Text style={styles.text}>Restaurant: {restaurantName}</Text>
+        <Text style={styles.text}>Pickup Time: {pickupTime}</Text>   
+      </View>
+        <View style={styles.homeButtonContainer}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.homeButton,
+              pressed && styles.homeButtonPressed,
+            ]}
+            onPress={() => router.push('/')}>
+            <Text style={styles.homeButtonText}>Start a New Order</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
+      
     </View>
   )
 }
@@ -43,13 +95,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
 
-  text: {
-    color: 'black',
-    fontSize: 42,
-    fontWeight: 'bold',
-    textAlign: 'center'
-  },
-
   decorativeBar: {
     height: 55,
     backgroundColor: '#881c1c',
@@ -61,13 +106,102 @@ const styles = StyleSheet.create({
     fontSize: 26,
   },
 
-  confirmationLocation: {
+  text: {
+    marginBottom: 5,
     fontFamily: 'OpenSans_400Regular',
-    fontSize: 15,
+    fontSize: 18,
   },
 
   textContainer: {
     margin: 15,
+  },
+
+  row: {
+    flex: 1,
+    flexGrow: 1,
+    flexDirection: 'row',
+    width: '100%',
+    minHeight: 75,
+    height: 'auto',
+    borderStyle: 'solid',
+    borderColor: '#a2aaad',
+    borderWidth: 0.5,
+    overflow: 'hidden',
+    marginHorizontal: 'auto',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
+
+  cartItem : {
+    width: '50%',
+    flexGrow: 1,
+  },
+
+  itemTitle: {
+    fontSize: 18,
+    fontFamily: 'OpenSans_400Regular',
+  },
+  
+  itemText : {
+    color: 'black',
+    fontFamily: 'OpenSans_400Regular',
+  },
+
+  itemPrice : {
+    color: 'black',
+    fontSize: 18,
+    fontFamily: 'OpenSans_400Regular',
+  },
+
+  orderTotalContainer: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginRight: 15,
+  },
+
+  orderTotal: {
+    color: 'black',
+    fontSize: 18,
+    fontFamily: 'OpenSans_400Regular',
+  },
+
+  homeButton: {
+    backgroundColor: '#881c1c',
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    borderRadius: 25,
+    width: '55%',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+
+  homeButtonPressed: {
+    transform: [{ scale: 0.95 }],
+  },
+
+  homeButtonContainer: {
+    marginTop: 30,
+    width: '100%',
+    alignItems: 'center',
+    zIndex: 10,
+    elevation: 10,
+    pointerEvents: 'auto',
+  },
+
+  homeButtonText: {
+    fontFamily: 'OpenSans_400Regular',
+    fontSize: 16,
+    color: 'white',
   },
 })
 
