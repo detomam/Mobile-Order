@@ -137,6 +137,7 @@ export default function Customization() {
         customizations: selectedOptions,
         price,
         restaurant: restaurantName,
+        restaurant_location: restaurantLocation,
       };
   
       const matchIndex = favorites.findIndex(fav =>
@@ -530,7 +531,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    backgroundColor: 'none',
   },
 
   addToOrderText: {

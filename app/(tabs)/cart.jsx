@@ -117,11 +117,11 @@ const cart = () => {
           if (savedLocation) setRestaurantLocation(savedLocation);
 
           const matchingLocation = LOCATION_DATA.find(
-            (location) => location.title === savedRestaurant
+            (location) => location.location_name === savedRestaurant
           );
   
           if (matchingLocation) {
-            setAvailableTimes(matchingLocation.availableTimes || []);
+            setAvailableTimes(matchingLocation.available_times || []);
           }
         }
       } catch (error) {

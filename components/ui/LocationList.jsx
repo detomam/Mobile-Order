@@ -1,49 +1,74 @@
 import { StyleSheet, Appearance, SafeAreaView, FlatList, ScrollView, Platform, View, Text, Pressable,} from "react-native";
 import {Colors} from '@/constants/Colors';
 import {LOCATION_DATA} from "@/constants/LocationData"
-import { setStatusBarHidden } from "expo-status-bar";
 import { Link } from 'expo-router';
+import { fetchLocations } from '@/utils/api';
+import React, { useEffect, useState } from 'react';
+import moment from 'moment';
 
 export default function LocationList() {
     const colorScheme = Appearance.getColorScheme();
     const theme = colorScheme === "dark" ? Colors.dark : Colors.light;
     const styles = createStyles(theme, colorScheme)
+    const [locations, setLocations] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const dayOfWeekNumber = moment().day();
 
     const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
+
+    useEffect(() => {
+        const getLocations = async () => {
+          try {
+            const now = new Date();
+            const time = now.toTimeString().split(' ')[0];
+    
+            const data = await fetchLocations(dayOfWeekNumber, time);
+            setLocations(data);
+          } catch (err) {
+            console.error('Error fetching locations:', err);
+            setError('Failed to load locations.');
+          } finally {
+            setLoading(false);
+          }
+        };
+    
+        getLocations();
+      }, []);
 
     return (
         <Container style={styles.container}>
             <FlatList 
                 data={LOCATION_DATA} 
-                keyExtractor = {(item) => item.id.toString()}
+                keyExtractor={(item) => item.location_number.toString()}
                 showsVerticalScrollIndicator = {false}
                 contentContainerStyle = {styles.contentContainer}
                 ListEmptyComponent = {<Text>No locations available</Text>}
                 renderItem = {({ item }) => (
                     <Link 
-                        href={{ pathname: "/menu", params: { title: item.title, location: item.location} }} 
+                        href={{ pathname: "/menu", params: { title: item.location_name, location: item.located_in} }} 
                         asChild
-                        style={[styles.row, item.openStatus ? styles.rowActive : styles.rowInactive]}
+                        style={[styles.row, item.open_status ? styles.rowActive : styles.rowInactive]}
                     >
                         <Pressable
-                            disabled={!item.openStatus}
+                            disabled={!item.open_status}
                             style={({ pressed }) => [
                                 styles.row,
-                                item.openStatus ? styles.rowActive : styles.rowInactive,
+                                item.open_status ? styles.rowActive : styles.rowInactive,
                                 pressed && styles.rowPressed,
                             ]}
                         >
                             <View style={styles.textRow}>
-                                <Text style={[styles.itemTitle, item.openStatus ? styles.itemTextActive : styles.itemTextInactive]}>
-                                    {item.title}
+                                <Text style={[styles.itemTitle, item.open_status ? styles.itemTextActive : styles.itemTextInactive]}>
+                                    {item.location_name}
                                 </Text>
-                                <Text style={[styles.itemText, item.openStatus ? styles.itemTextActive : styles.itemTextInactive]}>
-                                    {item.location}
+                                <Text style={[styles.itemText, item.open_status ? styles.itemTextActive : styles.itemTextInactive]}>
+                                    {item.located_in}
                                 </Text>
                             </View>
                             <View>
-                                <Text style={[styles.itemText, item.openStatus ? styles.itemTextActive : styles.itemTextInactive]}>
-                                    {item.openStatus ? item.hours : 'Closed'}
+                                <Text style={[styles.itemText, item.open_status ? styles.itemTextActive : styles.itemTextInactive]}>
+                                    {item.open_status ? item.hours : 'Closed'}
                                 </Text>
                             </View>
                         </Pressable>

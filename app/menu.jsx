@@ -36,33 +36,11 @@ export default function Menu() {
             <Text style={styles.restaurantTitle}>{title}</Text>
             <Text style={styles.restaurantLocation}>{location}</Text>
           </View>
-          <View style = {styles.horizontalListContainer}>
-            <Ionicons name="search-outline" size={20} color="#040404" style={{margin: 5}}/>
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator = {false}
-              data={sectionOptions}
-              keyExtractor = {(item) => item.toString()}
-              renderItem = {({ item }) => (
-                <Pressable
-                  onPress={() => {
-                    setSelectedOption(item);
-                    scrollToSection(item);
-                  }}
-                  style={[
-                    styles.horizontalListButton,
-                    selectedOption === item && styles.horizontalListButtonPressed,
-                  ]}
-                >
-                  <Text style = {styles.horizontalListText}>{item}</Text>
-                </Pressable>
-              )}
-            />
-          </View>
           <SafeAreaProvider>
             <SafeAreaView style= {styles.sectionListContainer}>
               <SectionList
               sections = {EXAMPLE_MENU}
+              stickySectionHeadersEnabled = {false}
               ref={sectionListRef}
               showsVerticalScrollIndicator = {false}
               keyExtractor={(item, index) => item + index}

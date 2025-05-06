@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '@/constants/Config';
 
-export const fetchLocations = async (date, time) => {
-  const response = await fetch(`${API_BASE_URL}/locations?date=${date}&time=${time}`);
+export const fetchLocations = async (dayOfWeek, time) => {
+  const response = await fetch(`${API_BASE_URL}/locations?dayOfWeek=${dayOfWeek}&time=${time}`);
   return response.json();
 };
 

@@ -1,11 +1,11 @@
 export const LOCATION_DATA = [
     {
-        "id": 0,
-        "title": 'ISB Cafe',
+        "location_number": 0,
+        "location_name": 'ISB Cafe',
         "hours": '8:00 AM - 2:30 PM',
-        "location": 'Integrated Sciences Building',
-        "openStatus": false,
-        "availableTimes": 
+        "located_in": 'Integrated Sciences Building',
+        "open_status": false,
+        "available_times": 
             ["8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM", "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM",
             "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM", "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM",
             "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM", "11:50 AM", "12:00 PM", "12:10 PM", "12:20 PM", "12:30 PM",
@@ -14,12 +14,12 @@ export const LOCATION_DATA = [
             
     },
     {
-        "id": 1,
-        "title": "People's Organic Coffee",
+        "location_number": 1,
+        "location_name": "People's Organic Coffee",
         "hours": '8:00 AM - 4:00 PM',
-        "location": 'Campus Center',
-        "openStatus": true,
-        "availableTimes": 
+        "located_in": 'Campus Center',
+        "open_status": true,
+        "available_times": 
             ["8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM", "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM",
             "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM", "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM",
             "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM", "11:50 AM", "12:00 PM", "12:10 PM", "12:20 PM", "12:30 PM",
@@ -27,12 +27,12 @@ export const LOCATION_DATA = [
             "2:20 PM", "2:30 PM", "2:40 PM", "2:50 PM", "3:00 PM", "3:10 PM", "3:20 PM", "3:30 PM", "3:40 PM", "3:50 PM"]
     },
     {
-        "id": 2,
-        "title": "Peet's Coffee and Tea",
+        "location_number": 2,
+        "location_name": "Peet's Coffee and Tea",
         "hours": '8:00 AM - 3:00 PM',
-        "location": 'Integrative Learning Center',
-        "openStatus": false,
-        "availableTimes": 
+        "located_in": 'Integrative Learning Center',
+        "open_status": false,
+        "available_times": 
             ["8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM", "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM",
             "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM", "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM",
             "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM", "11:50 AM", "12:00 PM", "12:10 PM", "12:20 PM", "12:30 PM",
@@ -40,12 +40,12 @@ export const LOCATION_DATA = [
             "2:20 PM", "2:30 PM", "2:40 PM", "2:50 PM"]
     },
     {
-        "id": 3,
-        "title": "Deli Delish",
+        "location_number": 3,
+        "location_name": "Deli Delish",
         "hours": '11:00 AM - 9:00 PM',
-        "location": 'Blue Wall',
-        "openStatus": true,
-        "availableTimes": 
+        "located_in": 'Blue Wall',
+        "open_status": true,
+        "available_times": 
             ["8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM", "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM",
             "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM", "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM",
             "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM", "11:50 AM", "12:00 PM", "12:10 PM", "12:20 PM", "12:30 PM",
@@ -53,12 +53,12 @@ export const LOCATION_DATA = [
             "2:20 PM", "2:30 PM", "2:40 PM", "2:50 PM", "3:00 PM", "3:10 PM", "3:20 PM", "3:30 PM", "3:40 PM", "3:50 PM"]
     },
     {
-        "id": 4,
-        "title": "Roots Cafe",
+        "location_number": 4,
+        "location_name": "Roots Cafe",
         "hours": '7:00 AM - 9:00 PM',
-        "location": 'Commonwealth Honors College',
-        "openStatus": true,
-        "availableTimes": 
+        "located_in": 'Commonwealth Honors College',
+        "open_status": true,
+        "available_times": 
             ["7:00 AM", "7:10 AM", "7:20 AM", "7:30 AM", "7:40 AM", "7:50 AM", "8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM",
             "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM", "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM",
             "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM", "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM",
@@ -70,12 +70,12 @@ export const LOCATION_DATA = [
             "8:00 PM", "8:10 PM", "8:20 PM", "8:30 PM", "8:40 PM", "8:50 PM"]
     },
     {
-        "id": 5,
-        "title": "Procrastination Station",
+        "location_number": 5,
+        "location_name": "Procrastination Station",
         "hours": '8:00 AM - 10:00 PM',
-        "location": 'W.E.B. DuBois Library',
-        "openStatus": true,
-        "availableTimes":
+        "located_in": 'W.E.B. DuBois Library',
+        "open_status": true,
+        "available_times":
             ["8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM", "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM",
             "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM", "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM",
             "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM", "11:50 AM", "12:00 PM", "12:10 PM", "12:20 PM", "12:30 PM",
@@ -87,11 +87,11 @@ export const LOCATION_DATA = [
             "9:00 PM", "9:10 PM", "9:20 PM", "9:30 PM", "9:40 PM", "9:50 PM"]
     },
     {
-        "id": 6,
-        "title": "Worcester Cafe",
+        "location_number": 6,
+        "location_name": "Worcester Cafe",
         "hours": '8:00 AM - 4:00 PM',
-        "location": 'Worcester DC',
-        "openStatus": true,
+        "located_in": 'Worcester DC',
+        "open_status": true,
         "availabkeTimes": 
             ["8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM", "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM",
             "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM", "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM",
@@ -100,12 +100,12 @@ export const LOCATION_DATA = [
             "2:20 PM", "2:30 PM", "2:40 PM", "2:50 PM", "3:00 PM", "3:10 PM", "3:20 PM", "3:30 PM", "3:40 PM", "3:50 PM"]
     },
     {
-        "id": 7,
-        "title": "Hampshire Cafe",
+        "location_number": 7,
+        "location_name": "Hampshire Cafe",
         "hours": '7:00 AM - 9:00 PM',
-        "location": 'Hampshire DC',
-        "openStatus": true,
-        "availableTimes":
+        "located_in": 'Hampshire DC',
+        "open_status": true,
+        "available_times":
             ["7:00 AM", "7:10 AM", "7:20 AM", "7:30 AM", "7:40 AM", "7:50 AM", "8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM",
             "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM", "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM",
             "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM", "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM",
@@ -117,12 +117,12 @@ export const LOCATION_DATA = [
             "8:00 PM", "8:10 PM", "8:20 PM", "8:30 PM", "8:40 PM", "8:50 PM"]
     },
     {
-        "id": 8,
-        "title": "Terrace",
+        "location_number": 8,
+        "location_name": "Terrace",
         "hours": '7:00 AM - 9:00 PM',
-        "location": 'Fieldstone Apartments',
-        "openStatus": true,
-        "availableTimes":
+        "located_in": 'Fieldstone Apartments',
+        "open_status": true,
+        "available_times":
             ["7:00 AM", "7:10 AM", "7:20 AM", "7:30 AM", "7:40 AM", "7:50 AM", "8:00 AM", "8:10 AM", "8:20 AM", "8:30 AM",
             "8:40 AM", "8:50 AM", "9:00 AM", "9:10 AM", "9:20 AM", "9:30 AM", "9:40 AM", "9:50 AM", "10:00 AM", "10:10 AM",
             "10:20 AM", "10:30 AM", "10:40 AM", "10:50 AM", "11:00 AM", "11:10 AM", "11:20 AM", "11:30 AM", "11:40 AM",

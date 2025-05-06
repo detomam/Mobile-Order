@@ -5,10 +5,15 @@ import React, { useState, useEffect, useContext } from 'react';
 import {router} from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
-
+import { CartContext } from "@/utils/CartContext";
+import { Alert } from "react-native";
+import CartButton from "./CartButton";
 
 export default function FavoritesList() {
 const [favoritesData, setFavorites] = useState([]);
+const [selectedItem, setSelectedItem] = useState(null);
+const {cartCount, updateCartCount } = useContext(CartContext);
+const [showCart, setShowCart] = useState(null)
 
     const getData = async (key) => {
         try {
@@ -36,6 +41,80 @@ const [favoritesData, setFavorites] = useState([]);
           console.error('Error removing item from favorites:', error);
         }
       };
+
+      const addToOrder = async (item) => {
+        try {
+          const newItem = {
+            name: item.name,
+            customizations: item.customizations,
+            price: item.price,
+            restaurant: item.restaurant,
+            restaurant_location: item.restaurant_location
+          };
+    
+          const existingCart = await AsyncStorage.getItem('cart');
+          const storedRestaurantName = await AsyncStorage.getItem('restaurantName');
+          const cart = existingCart ? JSON.parse(existingCart) : [];
+    
+          console.log('stored restaurant name: ', storedRestaurantName)
+          const restaurantName = item.restaurant;
+          const restaurantLocation = item.restaurant_location || '';
+    
+          if (storedRestaurantName && storedRestaurantName !== restaurantName && cart.length !== 0) {
+            Alert.alert("Order Already in Progress", "You already have an order in progress. Would you like to clear the cart?",
+              [      
+                {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              
+                {
+                  text: "Clear Cart",
+                  onPress: () => handleCartReset(newItem, restaurantName, restaurantLocation)(),
+                }]
+            );
+          }
+    
+          else {
+            cart.push(newItem)
+            await AsyncStorage.setItem('cart', JSON.stringify(cart));
+            await AsyncStorage.setItem('restaurantName', restaurantName)
+            await AsyncStorage.setItem('restaurantLocation', restaurantLocation)
+            console.log("Added to cart:", newItem);
+            
+            setShowCart([])
+            setSelectedItem(null);
+            updateCartCount(cart);
+          }
+    
+        } catch (error) {
+          console.error('Failed to add item to cart:', error);
+        }
+      };
+
+      const handleCartReset = (newItem, restaurantName, restaurantLocation) => async () => {
+        console.log("handling cart reset");
+        try {
+          await AsyncStorage.setItem('restaurantName', restaurantName);
+          await AsyncStorage.setItem('restaurantLocation', restaurantLocation);
+    
+          const newCart = [newItem];
+    
+          await AsyncStorage.setItem('cart', JSON.stringify(newCart));
+    
+          const cart = await AsyncStorage.getItem('cart');
+    
+          console.log('Item added to cart:', newItem);
+          console.log("Updated Cart Count:", cartCount);
+          
+          setSelectedItem(null);
+          updateCartCount(cart);
+        
+        } catch (error) {
+          console.error('Failed to add item to cart:', error);
+        }
+      }
 
     useFocusEffect(
         React.useCallback(() => {
@@ -67,13 +146,19 @@ const [favoritesData, setFavorites] = useState([]);
     const emptyFavoritesMessage = "Looks like you haven't added anything to your favorites yet. Don't worry, there's lots of delicious options to choose from. Head to the home page to find some great items to love!"
 
   return (
-    <View style={styles.container}>
-      <View style={styles.contentContainer}>
+    <View style={styles.contentContainer}>
       <SectionList
         sections={favoriteSections}
+        style={styles.favoritesList}
         keyExtractor={(item, index) => item.name + index}
         renderItem={({ item, index }) => (
-          <View key={index} style={styles.favoritesRow}>
+          <Pressable 
+            onPress={() => {
+              setSelectedItem(selectedItem === item ? null : item);
+            }}            
+            style={[styles.favoritesRow, selectedItem === item && styles.favoritesRowPressed,]}
+            key={index}
+            >
             <View style={styles.favoritesItem}>
               <Text style={styles.itemTitle}>{item.name}</Text>
               {item.customizations && Object.keys(item.customizations).length > 0 && (
@@ -99,7 +184,7 @@ const [favoritesData, setFavorites] = useState([]);
             <Pressable onPress={() => removeItem(item)}>
               <Ionicons name="close-outline" size={20} />
             </Pressable>
-          </View>
+          </Pressable>
         )}
         renderSectionHeader={({ section: { title } }) => (
           <Text style={styles.sectionHeader}>{title}</Text>
@@ -120,20 +205,32 @@ const [favoritesData, setFavorites] = useState([]);
           </View>
         }
         />
+      {selectedItem && (
+      <View style={styles.floatingButtonContainer}>
+        <Pressable
+          style={({ pressed }) => [styles.homeButton, pressed && styles.homeButtonPressed]}
+          onPress={() => addToOrder(selectedItem)}
+        >
+          <Text style={styles.homeButtonText}>Add to Order</Text>
+        </Pressable>
       </View>
-    </View>
+      )}
+      {showCart && (
+        <View style={styles.cartButtonContainer}>
+          <CartButton></CartButton>
+        </View>
+      )}
+      </View>
   );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
     contentContainer : {
-      paddingTop: 10,
-      paddingBottom: 10,
       width: '100%',
-      backgroundColor: 'white',
+    },
+
+    favoritesList: {
+      height: '100%',
     },
 
     textRow : {
@@ -178,19 +275,39 @@ const styles = StyleSheet.create({
         transform: [{ scale: 0.95 }],
     },
     
-      homeButtonContainer: {
-        marginTop: 60,
-        width: '100%',
-        alignItems: 'center',
-        zIndex: 10,
-        elevation: 10,
-        pointerEvents: 'auto',
-    },
+    homeButtonContainer: {
+      marginTop: 60,
+      width: '100%',
+      alignItems: 'center',
+      zIndex: 10,
+      elevation: 10,
+      pointerEvents: 'auto',
+  },
     
       homeButtonText: {
         fontFamily: 'OpenSans_400Regular',
         fontSize: 16,
         color: 'white',
+    },
+
+    floatingButtonContainer: {
+      position: 'absolute',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      zIndex: 999,
+      bottom: 10,
+      width: '100%',
+      alignItems: 'center',
+    },
+
+    cartButtonContainer: {
+      position: 'absolute',
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      zIndex: 999,
+      bottom: 10,
+      width: '100%',
+      alignItems: 'center',
     },
 
     favoritesRow: {
@@ -212,6 +329,12 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 3,
+    },
+
+    favoritesRowPressed: {
+      backgroundColor: '#F3DCDC',
+      borderColor: '#881C1C',
+      borderWidth: 2,
     },
 
     favoritesItem : {
