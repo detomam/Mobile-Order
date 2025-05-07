@@ -5,6 +5,7 @@ import { Link } from 'expo-router';
 import { fetchLocations } from '@/utils/api';
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import { ActivityIndicator } from "react-native";
 
 export default function LocationList() {
     const colorScheme = Appearance.getColorScheme();
@@ -19,27 +20,65 @@ export default function LocationList() {
 
     useEffect(() => {
         const getLocations = async () => {
-          try {
-            const now = new Date();
-            const time = now.toTimeString().split(' ')[0];
-    
-            const data = await fetchLocations(dayOfWeekNumber, time);
-            setLocations(data);
-          } catch (err) {
-            console.error('Error fetching locations:', err);
-            setError('Failed to load locations.');
-          } finally {
-            setLoading(false);
-          }
-        };
+            try {
+              const now = moment();
+              const dayOfWeek = now.isoWeekday(); // 1 = Monday, 7 = Sunday
+              const currentTime = now.format('HH:mm');
+        
+              const data = await fetchLocations();
+              const processed = data.map(location => {
+                let openTime, closeTime;
+        
+                if (dayOfWeek >= 6) {
+                  openTime = location.open_time_weekends;
+                  closeTime = location.close_time_weekends;
+                } else {
+                  openTime = location.open_time_weekdays;
+                  closeTime = location.close_time_weekdays;
+                }
+        
+                const isOpen =
+                  openTime &&
+                  closeTime &&
+                  moment(currentTime, 'HH:mm').isBetween(
+                    moment(openTime, 'hh:mm A'),
+                    moment(closeTime, 'hh:mm A'),
+                    null,
+                    '[)'
+                  );
+        
+                return {
+                  ...location,
+                  open_status: !!isOpen,
+                  hours: openTime && closeTime ? `${openTime} - ${closeTime}` : 'Closed Today',
+                };
+              });
+        
+              setLocations(processed);
+            } catch (err) {
+              console.error('Error fetching locations:', err);
+              setError('Failed to load locations.');
+            } finally {
+              setLoading(false);
+            }
+          };
     
         getLocations();
       }, []);
 
+    if (loading) {
+      return (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#881c1c" />
+          <Text style={styles.loadingText}>Loading...</Text>
+        </View>
+      );
+    }
+
     return (
         <Container style={styles.container}>
             <FlatList 
-                data={LOCATION_DATA} 
+                data={locations} 
                 keyExtractor={(item) => item.location_number.toString()}
                 showsVerticalScrollIndicator = {false}
                 contentContainerStyle = {styles.contentContainer}
@@ -130,5 +169,17 @@ function createStyles(theme, colorScheme) {
         itemTextInactive: {
             color: colorScheme === 'dark' ? '#a9a9a9' : '#7C7C7C',
         },
+
+        loadingContainer: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: theme.background,
+          },
+          loadingText: {
+            fontSize: 16,
+            fontFamily: 'OpenSans_400Regular',
+            color: theme.text,
+          },
     })
 }
