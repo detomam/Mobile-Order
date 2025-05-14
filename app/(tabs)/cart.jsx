@@ -9,7 +9,6 @@ import { PAYMENT_METHODS } from '@/constants/PaymentMethods';
 import { Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { fetchLocations, sendOrder } from '@/utils/api';
-import { sendOrderViaWebSocket, connectWebSocket } from '@/utils/websocket';
 import { ActivityIndicator } from 'react-native';
 import moment from 'moment';
 
@@ -78,7 +77,6 @@ const cart = () => {
 
       const response = await sendOrder(order);
       console.log("REST API Response:", JSON.stringify(response, null, 2));
-      sendOrderViaWebSocket(order);
       router.push({
         pathname: '/confirmation',
         params: {

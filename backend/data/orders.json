@@ -1,1 +1,38 @@
-[]
+[
+  {
+    "items": [
+      {
+        "name": "Blue Wall Club",
+        "quantity": 1,
+        "customizations": {
+          "Modifications": [
+            {
+              "id": "No Bacon",
+              "name": "No Bacon",
+              "rawValue": "No Bacon",
+              "price": 0
+            },
+            {
+              "id": "Add Spinach",
+              "name": "Add Spinach",
+              "rawValue": "Add Spinach",
+              "price": 0
+            }
+          ]
+        },
+        "price": 11.25
+      },
+      {
+        "name": "Apple & Fountain Beverage Combo",
+        "quantity": 1,
+        "customizations": {},
+        "price": 2.5
+      }
+    ],
+    "orderTotal": 13.75,
+    "customerName": "Michaela DeToma",
+    "restaurantName": "Deli Delish",
+    "pickupTime": "7:50 PM",
+    "orderNumber": "ORD-1747266162181"
+  }
+]
