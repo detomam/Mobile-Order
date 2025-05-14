@@ -11,6 +11,7 @@ import { useRouter } from 'expo-router';
 import { fetchLocations, sendOrder } from '@/utils/api';
 import { sendOrderViaWebSocket, connectWebSocket } from '@/utils/websocket';
 import { ActivityIndicator } from 'react-native';
+import moment from 'moment';
 
 const cart = () => {
   const { cartCount, loadCartCount, cartItems} = useContext(CartContext);
@@ -121,7 +122,14 @@ const cart = () => {
           );
   
           if (matchingLocation) {
-            setAvailableTimes(matchingLocation.available_times || []);
+            const availTimes = matchingLocation.available_times
+            const currentTime = moment();
+
+            const currentlyAvailable = availTimes.filter(time =>
+              moment(time, 'hh:mm:ss A').isAfter(currentTime)
+            );
+
+            setAvailableTimes(currentlyAvailable || []);
           }
         }
       } catch (error) {

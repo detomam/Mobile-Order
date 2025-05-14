@@ -158,10 +158,20 @@ export default function Customization() {
       const existingFavorites = await AsyncStorage.getItem('favorites');
       const favorites = existingFavorites ? JSON.parse(existingFavorites) : [];
   
+      let totalPrice = parseFloat(price) || 0;
+      Object.values(selectedOptions).forEach((value) => {
+        const valuesArray = Array.isArray(value) ? value : [value];
+        valuesArray.forEach((item) => {
+          if (item.price) {
+            totalPrice += parseFloat(item.price);
+          }
+        });
+      });
+
       const currentItem = {
         name,
         customizations: selectedOptions,
-        price,
+        price: totalPrice,
         restaurant: restaurantName,
         restaurant_location: restaurantLocation,
       };

@@ -44,10 +44,23 @@ const [showCart, setShowCart] = useState(null)
 
       const addToOrder = async (item) => {
         try {
+          let totalPrice = parseFloat(item.price) || 0;
+
+          selectedOptions = item.customizations;
+
+          Object.values(selectedOptions).forEach((value) => {
+            const valuesArray = Array.isArray(value) ? value : [value];
+            valuesArray.forEach((item) => {
+              if (item.price) {
+                totalPrice += parseFloat(item.price);
+              }
+            });
+          });
+
           const newItem = {
             name: item.name,
             customizations: item.customizations,
-            price: item.price,
+            price: totalPrice,
             restaurant: item.restaurant,
             restaurant_location: item.restaurant_location
           };
@@ -171,7 +184,19 @@ const [showCart, setShowCart] = useState(null)
                     if (isEmpty) return null;
                     return (
                       <Text key={i} style={styles.itemText}>
-                        {category}: {Array.isArray(value) ? value.join(', ') : value}
+                        {category}:
+                          {Array.isArray(value)
+                            ? value.map((entry, idx) => (
+                                <Text key={idx} style={styles.itemText}>
+                                  {" " + entry.name}
+                                  {idx < value.length - 1 ? ',' : ''}
+                                </Text>
+                              ))
+                            : (
+                                <Text style={styles.itemText}>
+                                  {value.name}
+                                </Text>
+                              )}
                       </Text>
                     );
                   })}
