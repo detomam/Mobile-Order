@@ -41,7 +41,19 @@ const confirmation = () => {
 
                   return (
                     <Text key={i} style={styles.itemText}>
-                      {category}: {Array.isArray(value) ? value.join(', ') : value}
+                      {category}:
+                        {Array.isArray(value)
+                          ? value.map((entry, idx) => (
+                              <Text key={idx} style={styles.itemText}>
+                                {" " + entry.name}
+                                {idx < value.length - 1 ? ',' : ''}
+                              </Text>
+                            ))
+                          : (
+                              <Text style={styles.itemText}>
+                                {value.name}
+                              </Text>
+                        )}
                     </Text>
                   );
                 })}

@@ -5,8 +5,8 @@ export const fetchLocations = async (dayOfWeek, time) => {
   return response.json();
 };
 
-export const fetchMenu = async (date, time, location_number) => {
-  const response = await fetch(`${API_BASE_URL}/menu?date=${date}&time=${time}&location_number=${location_number}`);
+export const fetchMenu = async (location_number) => {
+  const response = await fetch(`${API_BASE_URL}/menu?location_number=${location_number}`);
   return response.json();
 };
 

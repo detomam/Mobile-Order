@@ -1,34 +1,40 @@
 import { View, Text, StyleSheet, Image, SectionList, SafeAreaView, FlatList, Pressable} from 'react-native'
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import UMassAmherstImg from '@/assets/images/UMassAmherst_horiz.png'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import {EXAMPLE_MENU} from "@/constants/ExampleMenu"
 import { Link } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router';
 import { useRouter } from 'expo-router';
 import CartButton from '@/components/ui/CartButton';
+import { fetchMenu } from '@/utils/api';
 
 
 export default function Menu() {
   const [selectedOption, setSelectedOption] = useState('Entrees');
   const sectionListRef = useRef(null);
-  const { title, location } = useLocalSearchParams();
   const router = useRouter();
+  const { title, location, location_number } = useLocalSearchParams();
+  const [menuData, setMenuData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const sectionOptions = ['Entrees', 'Cold Drinks', 'Hot Drinks'];
 
-  const scrollToSection = (option) => {
-    const sectionIndex = EXAMPLE_MENU.findIndex((section) => section.title === option);
-    if (sectionIndex !== -1) {
-      sectionListRef.current?.scrollToLocation({
-        sectionIndex,
-        itemIndex: 0,
-        viewOffset: 10,
-        animated: true,
-      });
-    }
-  };
+  useEffect(() => {
+    const getMenu = async () => {
+      try {
+        const menu = await fetchMenu(location_number);
+        setMenuData(menu);
+        console.log(menuData)
+      } catch (error) {
+        console.error('Error fetching menu:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    getMenu();
+  }, [location_number]);
 
   return (
       <View style={styles.container}>
@@ -39,7 +45,7 @@ export default function Menu() {
           <SafeAreaProvider>
             <SafeAreaView style= {styles.sectionListContainer}>
               <SectionList
-              sections = {EXAMPLE_MENU}
+              sections = {menuData}
               stickySectionHeadersEnabled = {false}
               ref={sectionListRef}
               showsVerticalScrollIndicator = {false}
@@ -47,11 +53,14 @@ export default function Menu() {
               renderItem={({item}) => (
                 <Link href={{pathname: "/customization", params: { name: item.name, attributes: JSON.stringify(item.attributes), price: item.price, restaurantName: title, restaurantLocation: location },}} asChild>                  
                   <Pressable style={styles.itemButton}>
-                    <View style={styles.itemTextContainer}>
-                      <Text style={styles.itemText}>{item.name}</Text>
-                    </View>
-                    <View style = {styles.priceContainer}>
-                      <Text style = {styles.itemPrice}>${parseFloat(item.price).toFixed(2)}</Text>
+                    <View style={styles.itemButtonContent}>
+                      <View style={styles.itemTextContainer}>
+                        <Text style={styles.itemText}>{item.name}</Text>
+                        <Text style = {styles.itemPrice}>${parseFloat(item.price).toFixed(2)}</Text>
+                      </View>
+                      {item.description && (
+                        <Text style={styles.itemDescription}>{item.description}</Text>
+                      )}
                     </View>
                   </Pressable>
                 </Link>
@@ -110,19 +119,30 @@ const styles = StyleSheet.create({
   itemText: {
     fontFamily: 'OpenSans_400Regular',
     fontSize: 18,
-    marginLeft: 10,
+    flex: 1,
+  },
+
+  itemDescription: {
+    marginTop: 5,
+    fontSize: 13,
+    fontFamily: 'OpenSans_400Regular',
+  },
+
+  itemButtonContent: {
+    width: '100%',
+    flexDirection: 'column',
+    paddingHorizontal: 15, 
   },
 
   itemTextContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    width: '70%',
+    justifyContent: 'space-between',
+    width: '100%',
   },
 
   itemPrice: {
     fontFamily: 'OpenSans_400Regular',
     fontSize: 18,
-    marginLeft: 45,
   },
 
   priceContainer: {
@@ -138,7 +158,6 @@ const styles = StyleSheet.create({
 
   itemButton: {
     backgroundColor: '#F5F5F5',
-    flexDirection: 'row',
     paddingVertical: 20,
     alignItems: 'center',
     marginVertical: 10,

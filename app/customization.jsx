@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, Image, SectionList, SafeAreaView, FlatList, Pressable, Animated} from 'react-native'
+import { View, Text, StyleSheet, SectionList, SafeAreaView, Pressable, Animated} from 'react-native'
 import React, { useState, useRef, useContext } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
-import { SelectList, MultipleSelectList } from 'react-native-dropdown-select-list';
+import { SelectList } from 'react-native-dropdown-select-list';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CartButton from '@/components/ui/CartButton';
 import FavoriteButton from '@/components/ui/FavoriteButton';
@@ -15,49 +15,46 @@ export default function Customization() {
   const { name, attributes, price, restaurantName, restaurantLocation } = useLocalSearchParams();
   const parsedAttributes = attributes ? JSON.parse(attributes) : [];
   const [selectedOptions, setSelectedOptions] = useState({});
+  const [selectedAddOns, setSelectedAddOns] = useState({});
   const {cartCount, updateCartCount } = useContext(CartContext);
   const [isFavorited, setIsFavorited] = useState(false);
 
   const handleOptionSelect = (category, value) => {
     console.log(`Selected ${category}: ${value}`);
-    setSelectedOptions((prev) => {
-      const updatedOptions = {
-        ...prev,
-        [category]: value,
-      };
-      console.log('Updated options:', updatedOptions);
-      return updatedOptions;
-    });
+    if (category === "Add-Ons") {
+      setSelectedAddOns(value);
+      console.log("Updated add-ons:", value);
+    }
+    else {
+      setSelectedOptions((prev) => {
+        const updatedOptions = {
+          ...prev,
+          [category]: value,
+        };
+        console.log('Updated options:', updatedOptions);
+        return updatedOptions;
+        });
+    }
   };
 
-  const handleMultiSelectChange = (category, value) => {
-    let finalValue = value;
+  const handleMultiSelectChange = (category, options) => {
   
-    if (typeof value === 'function') {
-      try {
-        finalValue = value();
-      } catch (err) {
-        console.warn(`[handleMultiSelectChange] function could not be executed for ${category}`);
-        finalValue = [];
-      }
+    console.log(`category: ${category}, value:`, options);
+  
+    if (category === "Add-Ons") {
+      setSelectedAddOns(options);
+      console.log('Updated add-ons:', options);
     }
-  
-    // Handle if value is null or undefined
-    if (!finalValue) {
-      console.warn(`[handleMultiSelectChange] value is null or undefined for ${category}`);
-      finalValue = [];
-    }
-  
-    console.log(`[handleMultiSelectChange] category: ${category}, value:`, finalValue);
-  
-    setSelectedOptions((prev) => {
-      const updatedOptions = {
-        ...prev,
-        [category]: Array.isArray(finalValue) ? [...finalValue] : [finalValue],
-      };
-      console.log('Updated options:', updatedOptions);
-      return updatedOptions;
+    else{
+      setSelectedOptions((prev) => {
+        const updatedOptions = {
+          ...prev,
+          [category]: options,
+        };
+        console.log('Updated options:', updatedOptions);
+        return updatedOptions;
     });
+    }
   };
 
   const handleCartReset = (newItem) => async () => {
@@ -84,11 +81,37 @@ export default function Customization() {
 
   const addToOrder = async () => {
     try {
-      const newItem = {
+      let totalPrice = parseFloat(price) || 0;
+      
+      const addOnItems = [];
+
+      if (selectedAddOns && selectedAddOns.length > 0) {
+        selectedAddOns.forEach(addOn => {
+          const addOnPrice = parseFloat(addOn.price ?? 0);
+          addOnItems.push({
+            name: addOn.rawValue,
+            price: addOnPrice,
+            isAddOn: true,
+          });
+        });
+      }
+
+      Object.values(selectedOptions).forEach((value) => {
+        const valuesArray = Array.isArray(value) ? value : [value];
+        valuesArray.forEach((item) => {
+          if (item.price) {
+            totalPrice += parseFloat(item.price);
+          }
+        });
+      });
+
+      const mainItem = {
         name,
-        customizations: selectedOptions,
-        price,
+        customizations: selectedOptions,       
+        price: totalPrice,
       };
+
+      const newItems = [mainItem, ...addOnItems];
 
       const existingCart = await AsyncStorage.getItem('cart');
       const storedRestaurantName = await AsyncStorage.getItem('restaurantName');
@@ -108,17 +131,20 @@ export default function Customization() {
           
             {
               text: "Clear Cart",
-              onPress: () => handleCartReset(newItem)(),
+              onPress: () => handleCartReset(newItems)(),
             }]
         );
       }
 
       else {
-        cart.push(newItem)
+        cart.push(mainItem)
+        addOnItems.forEach(addOn => {
+          cart.push(addOn);
+        });
         await AsyncStorage.setItem('cart', JSON.stringify(cart));
         await AsyncStorage.setItem('restaurantName', restaurantName)
         await AsyncStorage.setItem('restaurantLocation', restaurantLocation)
-        console.log("Added to cart:", newItem);
+        console.log("Added to cart:", JSON.stringify(newItems));
         updateCartCount(cart);
       }
 
@@ -177,23 +203,40 @@ export default function Customization() {
               keyExtractor={(item, index) => `${item.key}-${index}`}
               renderItem={({ item, section }) => (
                 <View>
-                  {section.title === "Ingredients" || section.title === "Allergens" ? (
+                  {section.title === "Allergens" ? (
                       <Text style={styles.ingredientText}>
                         {item.value.map((entry) => entry.value).join(", ")}
                       </Text> 
                   ) : section.title === "Size" ? (
                     <View style={styles.sizeButtonsContainer}>
-                      {item.value.map(([sizeLabel, sizeValue], index) => (
+                      {item.value.map(([sizeLabel, sizeValue, sizePrice], index) => (
                         <Pressable
                         key={index} 
-                        style={styles.sizeButton} 
-                        onPress={() => handleOptionSelect('Size', sizeLabel)}>
+                        style={({ pressed }) => [
+                          styles.sizeButton,
+                          (pressed || selectedOptions?.Size?.label === sizeLabel)
+                        ]} 
+                        onPress={() => {
+                          const value = {
+                            label: sizeLabel,
+                            price: sizePrice || 0,
+                          };
+                          handleOptionSelect("Size", value);
+                        }}>
                           <Text style={styles.sizeButtonText}>{sizeLabel}</Text>
                           <Text style={styles.sizeButtonText}>{sizeValue}</Text>
+                          {sizePrice !== 0 && (
+                            <Text style={styles.sizeButtonText}>+${parseFloat(sizePrice).toFixed(2)}</Text>
+                          )}
                         </Pressable>
                       ))}
                     </View> 
-                  ) : (
+                  ) : section.title === "Ingredients" ? (
+                    <Text style={styles.ingredientText}>
+                        {item.value}
+                    </Text> 
+                  )
+                  :(
                   <DropdownMultipleSelect 
                   options={item.value} 
                   category={section.title}
@@ -264,47 +307,24 @@ function DropdownSelect({ options, onSelect, category }) {
 
 function DropdownMultipleSelect({ options, onSelect, category }) {
   const [selectedItems, setSelectedItems] = useState([]);
-  const [dropdownAnim] = useState(new Animated.Value(0));
-  const [dropdownVisible, setDropdownVisible] = useState(false);
   
   const dropdownData = options.map((option) => ({
     id: option.key,
-    name: option.value,
+    name: option.price ? `${option.value} (+$${parseFloat(option.price).toFixed(2)})` : option.value,
+    rawValue: option.value,
+    price: option.price || 0,
   }));
-
-  const slideDown = () => {
-    setDropdownVisible(true);
-    Animated.timing(dropdownAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  };
-  
-  const slideUp = () => {
-    Animated.timing(dropdownAnim, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start(() => {
-      setDropdownVisible(false);
-    });
-  };
-
-  const dropdownTranslateY = dropdownAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-20, 0],
-  });
-  
-  const dropdownOpacity = dropdownAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 1],
-  });
 
   const handleSelectionChange = (selectedIds) => {
     setSelectedItems(selectedIds);
-    console.log(`[DropdownMultipleSelect] ${category} selected:`, selectedIds);
-    onSelect(category, selectedIds);
+
+    const selectedOptions = dropdownData.filter((item) =>
+      selectedIds.includes(item.id)
+    );
+  
+    console.log(`[${category}] selected:`, selectedOptions);
+    
+    onSelect(category, selectedOptions)
   };
 
   const selectedNames = dropdownData
@@ -364,8 +384,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     backgroundColor: 'white',
-    paddingBottom: 90,
+    paddingBottom: 100,
   },
+
   horizontalListContainer : {
     flexDirection: 'row',
     borderStyle: 'solid',
@@ -405,7 +426,7 @@ const styles = StyleSheet.create({
   ingredientText: {
     fontFamily: 'OpenSans_400Regular',
     fontSize: 14,
-    marginLeft: 15,
+    marginHorizontal: 15,
   },
 
   itemNameText: {
@@ -499,6 +520,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 4,
+  },
+
+  sizeButtonPressed: {
+    backgroundColor: '#F3DCDC',
+      borderColor: '#881C1C',
+      borderWidth: 2,
   },
 
   sizeButtonText: {

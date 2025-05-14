@@ -1,11 +1,8 @@
-import { View, Text, StyleSheet, ScrollView, FlatList, Pressable} from 'react-native'
-import { SelectList } from 'react-native-dropdown-select-list';
+import { View, Text, StyleSheet} from 'react-native'
 import React, {useContext, useState, useEffect, useCallback} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FavoritesList from '@/components/ui/FavoritesList';
 import { useFocusEffect } from '@react-navigation/native';
-import { LOCATION_DATA } from '@/constants/LocationData';
-import { PAYMENT_METHODS } from '@/constants/PaymentMethods';
 import { useRouter } from 'expo-router';
 import { FavoritesContext } from '@/utils/FavoritesContext';
 

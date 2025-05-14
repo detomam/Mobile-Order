@@ -56,10 +56,26 @@ const { cartCount, loadCartCount, cartItems, updateCartCount} = useContext(CartC
     const emptyCartMessage = "Looks like you haven't added anything to your cart yet. Don't worry, there's lots of delicious options to choose from. Head to the home page to start an order!"
 
     const orderTotal = cartData.reduce((sum, item) => {
-      const price = parseFloat(item.price);
+      const basePrice = parseFloat(item.price);
       const quantity = item.quantity ? parseInt(item.quantity) : 1;
-      console.log(`Item price: ${price}, quantity: ${quantity}`);
-      return !isNaN(price) && !isNaN(quantity) ? sum + price * quantity : sum;
+
+      let customizationPrice = 0;
+      if (item.modifications) {
+        Object.values(item.modifications).forEach(value => {
+          if (Array.isArray(value)) {
+            value.forEach(entry => {
+              if (typeof entry === 'object' && entry !== null && entry.price) {
+                customizationPrice += parseFloat(entry.price);
+              }
+            });
+          } else if (typeof value === 'object' && value !== null && value.price) {
+            customizationPrice += parseFloat(value.price);
+          }
+        });
+      }
+    
+      const itemTotal = (basePrice + customizationPrice) * quantity;
+      return sum + itemTotal;
   }, 0);
 
   return (
@@ -97,10 +113,22 @@ const { cartCount, loadCartCount, cartItems, updateCartCount} = useContext(CartC
                           (typeof value === 'string' && value.trim() === '');
 
                         if (isEmpty) return null;
-
+                      
                         return (
                           <Text key={i} style={styles.itemText}>
-                            {category}: {Array.isArray(value) ? value.join(', ') : value}
+                            {category}:
+                            {Array.isArray(value)
+                              ? value.map((entry, idx) => (
+                                  <Text key={idx} style={styles.itemText}>
+                                    {" " + entry.name}
+                                    {idx < value.length - 1 ? ',' : ''}
+                                  </Text>
+                                ))
+                              : (
+                                  <Text style={styles.itemText}>
+                                    {value.name}
+                                  </Text>
+                                )}
                           </Text>
                         );
                       })}
@@ -148,6 +176,7 @@ const styles = StyleSheet.create({
     itemText : {
         color: theme.text,
         fontFamily: 'OpenSans_400Regular',
+        fontSize: 13,
     },
 
     emptyCartTitle: {

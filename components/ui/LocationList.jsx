@@ -1,6 +1,5 @@
 import { StyleSheet, Appearance, SafeAreaView, FlatList, ScrollView, Platform, View, Text, Pressable,} from "react-native";
 import {Colors} from '@/constants/Colors';
-import {LOCATION_DATA} from "@/constants/LocationData"
 import { Link } from 'expo-router';
 import { fetchLocations } from '@/utils/api';
 import React, { useEffect, useState } from 'react';
@@ -21,35 +20,37 @@ export default function LocationList() {
     useEffect(() => {
         const getLocations = async () => {
             try {
-              const now = moment();
-              const dayOfWeek = now.isoWeekday(); // 1 = Monday, 7 = Sunday
-              const currentTime = now.format('HH:mm');
+                const now = moment();
+                const dayOfWeek = now.isoWeekday(); // 1 = Monday, 7 = Sunday
+                const currentTime = now.format('HH:mm');
         
-              const data = await fetchLocations();
-              const processed = data.map(location => {
+                const data = await fetchLocations();
+                const processed = data.map(location => {
                 let openTime, closeTime;
         
                 if (dayOfWeek >= 6) {
-                  openTime = location.open_time_weekends;
-                  closeTime = location.close_time_weekends;
-                } else {
-                  openTime = location.open_time_weekdays;
-                  closeTime = location.close_time_weekdays;
+                    openTime = location.open_time_weekends;
+                    closeTime = location.close_time_weekends;
+                }   
+                else {
+                    openTime = location.open_time_weekdays;
+                    closeTime = location.close_time_weekdays;
                 }
         
                 const isOpen =
-                  openTime &&
-                  closeTime &&
-                  moment(currentTime, 'HH:mm').isBetween(
-                    moment(openTime, 'hh:mm A'),
-                    moment(closeTime, 'hh:mm A'),
-                    null,
-                    '[)'
-                  );
+                location.alternate_open_status &&
+                openTime &&
+                closeTime &&
+                moment(currentTime, 'HH:mm').isBetween(
+                  moment(openTime, 'hh:mm A'),
+                  moment(closeTime, 'hh:mm A'),
+                  null,
+                  '[)'
+                );
         
                 return {
                   ...location,
-                  open_status: !!isOpen,
+                  alternate_open_status: !!isOpen,
                   hours: openTime && closeTime ? `${openTime} - ${closeTime}` : 'Closed Today',
                 };
               });
@@ -85,12 +86,19 @@ export default function LocationList() {
                 ListEmptyComponent = {<Text>No locations available</Text>}
                 renderItem = {({ item }) => (
                     <Link 
-                        href={{ pathname: "/menu", params: { title: item.location_name, location: item.located_in} }} 
+                    href={{ 
+                        pathname: "/menu", 
+                        params: { 
+                          title: item.location_name, 
+                          location: item.located_in, 
+                          location_number: item.location_number 
+                        } 
+                      }}  
                         asChild
-                        style={[styles.row, item.open_status ? styles.rowActive : styles.rowInactive]}
+                        style={[styles.row, item.alternate_open_status ? styles.rowActive : styles.rowInactive]}
                     >
                         <Pressable
-                            disabled={!item.open_status}
+                            disabled={!item.alternate_open_status}
                             style={({ pressed }) => [
                                 styles.row,
                                 item.open_status ? styles.rowActive : styles.rowInactive,
@@ -98,16 +106,16 @@ export default function LocationList() {
                             ]}
                         >
                             <View style={styles.textRow}>
-                                <Text style={[styles.itemTitle, item.open_status ? styles.itemTextActive : styles.itemTextInactive]}>
+                                <Text style={[styles.itemTitle, item.alternate_open_status ? styles.itemTextActive : styles.itemTextInactive]}>
                                     {item.location_name}
                                 </Text>
-                                <Text style={[styles.itemText, item.open_status ? styles.itemTextActive : styles.itemTextInactive]}>
+                                <Text style={[styles.itemText, item.alternate_open_status ? styles.itemTextActive : styles.itemTextInactive]}>
                                     {item.located_in}
                                 </Text>
                             </View>
                             <View>
-                                <Text style={[styles.itemText, item.open_status ? styles.itemTextActive : styles.itemTextInactive]}>
-                                    {item.open_status ? item.hours : 'Closed'}
+                                <Text style={[styles.itemText, item.alternate_open_status ? styles.itemTextActive : styles.itemTextInactive]}>
+                                    {item.alternate_open_status ? item.hours : 'Closed'}
                                 </Text>
                             </View>
                         </Pressable>

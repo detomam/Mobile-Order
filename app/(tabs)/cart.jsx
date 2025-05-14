@@ -5,11 +5,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CartList from '@/components/ui/CartList';
 import { CartContext } from '@/utils/CartContext';
 import { useFocusEffect } from '@react-navigation/native';
-import { LOCATION_DATA } from '@/constants/LocationData';
 import { PAYMENT_METHODS } from '@/constants/PaymentMethods';
 import { Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { sendOrder } from '@/utils/api';
+import { fetchLocations, sendOrder } from '@/utils/api';
 import { sendOrderViaWebSocket, connectWebSocket } from '@/utils/websocket';
 import { ActivityIndicator } from 'react-native';
 
@@ -116,7 +115,8 @@ const cart = () => {
           if (savedRestaurant) setRestaurantName(savedRestaurant);
           if (savedLocation) setRestaurantLocation(savedLocation);
 
-          const matchingLocation = LOCATION_DATA.find(
+          const allLocations = await fetchLocations();
+          const matchingLocation = allLocations.find(
             (location) => location.location_name === savedRestaurant
           );
   
