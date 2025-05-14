@@ -224,7 +224,7 @@ export default function Customization() {
                         key={index} 
                         style={({ pressed }) => [
                           styles.sizeButton,
-                          (pressed || selectedOptions?.Size?.label === sizeLabel)
+                          (pressed || selectedOptions?.Size?.label === sizeLabel) && styles.sizeButtonPressed
                         ]} 
                         onPress={() => {
                           const value = {
